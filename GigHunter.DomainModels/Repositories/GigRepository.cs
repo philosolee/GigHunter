@@ -41,11 +41,7 @@ namespace GigHunter.DomainModels.Repositories
 
 		public bool UpdateById(ObjectId id, Gig updatedGig)
 		{
-			var update = Builders<Gig>.Update
-				.Set("Artist", updatedGig.Artist)
-				.Set("Venue", updatedGig.Venue)
-				.Set("Date", updatedGig.Date)
-				.Set("TicketUri", updatedGig.TicketUri);
+			var update = GigUpdateDefinition(updatedGig);
 
 			var result = _gigCollection.UpdateOne(Filter<Gig>.Id(id), update);
 
@@ -54,27 +50,32 @@ namespace GigHunter.DomainModels.Repositories
 
 		public bool UpdateById(string id, Gig updatedGig)
 		{
-			var update = Builders<Gig>.Update
-				.Set("Artist", updatedGig.Artist)
-				.Set("Venue", updatedGig.Venue)
-				.Set("Date", updatedGig.Date)
-				.Set("TicketUri", updatedGig.TicketUri);
-			
+			var update = GigUpdateDefinition(updatedGig);
+
 			var result = _gigCollection.UpdateOne(Filter<Gig>.IdAsString(id), update);
 
 			return result.ModifiedCount != 0;
 		}
 
-		public long DeleteById(ObjectId id)
+		public bool DeleteById(ObjectId id)
 		{
 			var result = _gigCollection.DeleteOne(Filter<Gig>.Id(id));
-			return result.DeletedCount;
+			return result.DeletedCount == 1;
 		}
 
-		public long DeleteById(string id)
+		public bool DeleteById(string id)
 		{
 			var result = _gigCollection.DeleteOne(Filter<Gig>.IdAsString(id));
-			return result.DeletedCount;
+			return result.DeletedCount == 1;
+		}
+
+		private static UpdateDefinition<Gig> GigUpdateDefinition(Gig updatedGig)
+		{
+			return Builders<Gig>.Update
+				.Set("Artist", updatedGig.Artist)
+				.Set("Venue", updatedGig.Venue)
+				.Set("Date", updatedGig.Date)
+				.Set("TicketUri", updatedGig.TicketUri);
 		}
 	}
 }

@@ -3,9 +3,9 @@ using GigHunter.DomainModels;
 using MongoDB.Bson;
 using System.Collections.Generic;
 
-namespace GigHunter.DomainModel.Tests.Utilities
+namespace GigHunter.TestUtilities.Database
 {
-	internal class MongoDatabaseUtilities<T>
+	public class MongoDatabaseUtilities<T>
 	{
 		public IMongoDatabase mongoDatabase;
 

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GigHunter.DomainModels.Models;
+﻿using GigHunter.DomainModels.Models;
 using NUnit.Framework;
 
-namespace GigHunter.DomainModel.Tests.Assertors
+namespace GigHunter.TestUtilities.Assertors
 {
 	public class ArtistAssertor : IModelAssertor
 	{

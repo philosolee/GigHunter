@@ -1,6 +1,6 @@
 ﻿using System;
-using GigHunter.DomainModel.Tests.Assertors;
-using GigHunter.DomainModel.Tests.Utilities;
+using GigHunter.TestUtilities.Database;
+using GigHunter.TestUtilities.Assertors;
 using GigHunter.DomainModels.Models;
 using GigHunter.DomainModels.Repositories;
 using MongoDB.Bson;
@@ -234,10 +234,10 @@ namespace GigHunter.DomainModel.Tests.Repositories
 			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
 			// Perform
-			var numberDeleted = _artistRepository.DeleteById(_testArtistOne.Id);
+			var result = _artistRepository.DeleteById(_testArtistOne.Id);
 
 			// Verify
-			Assert.AreEqual(1, numberDeleted);
+			Assert.IsTrue(result);
 
 			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
 			Assert.AreEqual(countBefore - 1, countAfter);
@@ -256,10 +256,10 @@ namespace GigHunter.DomainModel.Tests.Repositories
 
 			// Perform
 			var idAsString = _testArtistOne.Id.ToString();
-			var numberDeleted = _artistRepository.DeleteById(idAsString);
+			var result = _artistRepository.DeleteById(idAsString);
 
 			// Verify
-			Assert.AreEqual(1, numberDeleted);
+			Assert.IsTrue(result);
 
 			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
 			Assert.AreEqual(countBefore - 1, countAfter);
@@ -278,10 +278,10 @@ namespace GigHunter.DomainModel.Tests.Repositories
 
 			// Perform
 			var invalidId = new ObjectId();
-			var numberDeleted = _artistRepository.DeleteById(invalidId);
+			var result = _artistRepository.DeleteById(invalidId);
 
 			// Verify
-			Assert.AreEqual(0, numberDeleted);
+			Assert.IsFalse(result);
 
 			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
 			Assert.AreEqual(countBefore, countAfter);
@@ -297,10 +297,10 @@ namespace GigHunter.DomainModel.Tests.Repositories
 
 			// Perform
 			var idAsString = new ObjectId().ToString();
-			var numberDeleted = _artistRepository.DeleteById(idAsString);
+			var result = _artistRepository.DeleteById(idAsString);
 
 			// Verify
-			Assert.AreEqual(0, numberDeleted);
+			Assert.IsFalse(result);
 
 			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
 			Assert.AreEqual(countBefore, countAfter);

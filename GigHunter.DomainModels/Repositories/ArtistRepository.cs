@@ -27,51 +27,53 @@ namespace GigHunter.DomainModels.Repositories
 			return result;
 		}
 
-		public async Task<List<Artist>> GetById(string id)
-		{
-			var result = await _artistCollection.Find(Filter<Artist>.IdAsString(id)).ToListAsync();
-			return result;
-		}
-
 		public async Task<List<Artist>> GetById(ObjectId id)
 		{
 			var result = await _artistCollection.Find(Filter<Artist>.Id(id)).ToListAsync();
 			return result;
 		}
 
-		public bool UpdateById(string id, Artist updatedArtist)
+		public async Task<List<Artist>> GetById(string id)
 		{
-			var update = Builders<Artist>.Update
-				.Set("Name", updatedArtist.Name)
-				.Set("LastSearchedForDate", updatedArtist.LastSearchedForDate);
-
-			var result = _artistCollection.UpdateOne(Filter<Artist>.IdAsString(id), update);
-
-			return result.ModifiedCount != 0;
+			var result = await _artistCollection.Find(Filter<Artist>.IdAsString(id)).ToListAsync();
+			return result;
 		}
 
 		public bool UpdateById(ObjectId id, Artist updatedArtist)
 		{
-			var update = Builders<Artist>.Update
-				.Set("Name", updatedArtist.Name)
-				.Set("LastSearchedForDate", updatedArtist.LastSearchedForDate);
+			var update = ArtistUpdateDefinition(updatedArtist);
 
 			var result = _artistCollection.UpdateOne(Filter<Artist>.Id(id), update);
 
 			return result.ModifiedCount != 0;
 		}
 
-		public long DeleteById(ObjectId id)
+		public bool UpdateById(string id, Artist updatedArtist)
+		{
+			var updateDefinition = ArtistUpdateDefinition(updatedArtist);
+
+			var result = _artistCollection.UpdateOne(Filter<Artist>.IdAsString(id), updateDefinition);
+
+			return result.ModifiedCount != 0;
+		}
+
+		public bool DeleteById(ObjectId id)
 		{
 			var result = _artistCollection.DeleteOne(Filter<Artist>.Id(id));
-			return result.DeletedCount;
+			return result.DeletedCount == 1;
 		}
 
-		public long DeleteById(string id)
+		public bool DeleteById(string id)
 		{
 			var result = _artistCollection.DeleteOne(Filter<Artist>.IdAsString(id));
-			return result.DeletedCount;
+			return result.DeletedCount == 1;
 		}
 
+		private static UpdateDefinition<Artist> ArtistUpdateDefinition(Artist updatedArtist)
+		{
+			return Builders<Artist>.Update
+				.Set("Name", updatedArtist.Name)
+				.Set("LastSearchedForDate", updatedArtist.LastSearchedForDate);
+		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using GigHunter.DomainModels.Models;
 
-namespace GigHunter.DomainModel.Tests.Assertors
+namespace GigHunter.TestUtilities.Assertors
 {
 	public interface IModelAssertor
 	{

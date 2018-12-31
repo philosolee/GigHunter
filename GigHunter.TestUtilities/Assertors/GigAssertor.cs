@@ -1,8 +1,7 @@
 ﻿using GigHunter.DomainModels.Models;
 using NUnit.Framework;
-using System;
 
-namespace GigHunter.DomainModel.Tests.Assertors
+namespace GigHunter.TestUtilities.Assertors
 {
 	public class GigAssertor : IModelAssertor
 	{
