@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -16,6 +17,6 @@ namespace GigHunter.DomainModels.Models
 
 		public string Venue { get; set; }
 
-		public string TicketUri { get; set; }
+		public List<string> TicketUrls { get; set; } = new List<string>();
 	}
 }

@@ -75,7 +75,7 @@ namespace GigHunter.DomainModels.Repositories
 				.Set("Artist", updatedGig.Artist)
 				.Set("Venue", updatedGig.Venue)
 				.Set("Date", updatedGig.Date)
-				.Set("TicketUri", updatedGig.TicketUri);
+				.Set("TicketUrls", updatedGig.TicketUrls);
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace GigHunter.TestUtilities.Assertors
 			Assert.AreEqual(_expected.Artist, _actual.Artist);
 			Assert.AreEqual(_expected.Venue, _actual.Venue);
 			Assert.AreEqual(_expected.Date, _actual.Date);
-			Assert.AreEqual(_expected.TicketUri, _actual.TicketUri);
+			CollectionAssert.AreEquivalent(_expected.TicketUrls, _actual.TicketUrls);
 		}
 
 	}

@@ -11,8 +11,8 @@ namespace GigHunter.TestUtilities.Assertors
 {
 	public class SiteAssertor : IModelAssertor
 	{
-		private Site _actual;
-		private Site _expected;
+		private Source _actual;
+		private Source _expected;
 
 		public static IModelAssertor New()
 		{
@@ -21,13 +21,13 @@ namespace GigHunter.TestUtilities.Assertors
 
 		public IModelAssertor Actual(IModel actual)
 		{
-			_actual = (Site)actual;
+			_actual = (Source)actual;
 			return this;
 		}
 
 		public IModelAssertor Expected(IModel expected)
 		{
-			_expected = (Site)expected;
+			_expected = (Source)expected;
 			return this;
 		}
 

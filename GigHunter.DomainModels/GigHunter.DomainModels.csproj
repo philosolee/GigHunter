@@ -62,7 +62,7 @@
     <Compile Include="Models\Artist.cs" />
     <Compile Include="Models\Gig.cs" />
     <Compile Include="Models\IModel.cs" />
-    <Compile Include="Models\Site.cs" />
+    <Compile Include="Models\Source.cs" />
     <Compile Include="Repositories\ArtistRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
@@ -73,7 +73,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Repositories\GigRepository.cs" />
-    <Compile Include="Repositories\SiteRepository.cs" />
+    <Compile Include="Repositories\SourceRepository.cs" />
     <Compile Include="Utilities\Filters.cs" />
   </ItemGroup>
   <ItemGroup>

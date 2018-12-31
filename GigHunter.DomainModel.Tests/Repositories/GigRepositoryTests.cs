@@ -5,6 +5,7 @@ using GigHunter.DomainModels.Models;
 using GigHunter.DomainModels.Repositories;
 using MongoDB.Bson;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace GigHunter.DomainModel.Tests.Repositories
 {
@@ -148,7 +149,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 			_testGigOne.Artist = "Radiohead";
 			_testGigOne.Venue = "Sheffield";
 			_testGigOne.Date = new DateTime(2019, 4, 18);
-			_testGigOne.TicketUri = "http://stackoverflow.com";
+			_testGigOne.TicketUrls.Add("http://stackoverflow.com");
 
 			// Update the record
 			var result = _gigRepository.UpdateById(_testGigOne.Id, _testGigOne);
@@ -173,7 +174,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 			_testGigOne.Artist = "Radiohead";
 			_testGigOne.Venue = "Sheffield";
 			_testGigOne.Date = new DateTime(2019, 4, 18);
-			_testGigOne.TicketUri = "http://stackoverflow.com";
+			_testGigOne.TicketUrls.Add("http://stackoverflow.com");
 
 			// Update the record
 			var idAsString = _testGigOne.Id.ToString();
@@ -200,7 +201,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 				Artist = "Radiohead",
 				Venue = "Sheffield",
 				Date = new DateTime(2019, 4, 18),
-				TicketUri = "http://stackoverflow.com"
+				TicketUrls = new List<string> { "http://stackoverflow.com" }
 			};
 
 			// Perform
@@ -228,7 +229,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 				Artist = "Radiohead",
 				Venue = "Sheffield",
 				Date = new DateTime(2019, 4, 18),
-				TicketUri = "http://stackoverflow.com"
+				TicketUrls = new List<string> { "http://stackoverflow.com" }
 			};
 
 			// Perform
@@ -334,7 +335,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 				Artist = "Tool",
 				Date = new DateTime(2018, 05, 15),
 				Venue = "Amsterdam",
-				TicketUri = "http://google.com"
+				TicketUrls = new List<string> { "http://google.com" }
 			};
 		}
 
@@ -345,7 +346,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 				Artist = "The Mars Volta",
 				Date = new DateTime(2019, 12, 31),
 				Venue = "Machester",
-				TicketUri = "http://bbc.co.uk"
+				TicketUrls = new List<string> { "http://bbc.co.uk" }
 			};
 		}
 
@@ -356,7 +357,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 				Artist = "ISIS",
 				Date = new DateTime(2019, 07, 01),
 				Venue = "Leeds",
-				TicketUri = "http://reddit.com"
+				TicketUrls = new List<string> { "http://reddit.com", "http://google.com" }
 			};
 		}
 		#endregion

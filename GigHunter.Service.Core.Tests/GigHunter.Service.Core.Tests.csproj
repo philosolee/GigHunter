@@ -38,6 +38,7 @@
     <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=106.6.2.0, Culture=neutral, PublicKeyToken=598062e77f915f75" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiClients\Ents24ClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,9 +59,17 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GigHunter.DomainModels\GigHunter.DomainModels.csproj">
+      <Project>{9CEFC23D-37C8-4A9D-BB48-FEE0D88A50C8}</Project>
+      <Name>GigHunter.DomainModels</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GigHunter.Service.Core\GigHunter.Service.Core.csproj">
       <Project>{c3be6a76-fad4-4935-80ed-31df3ca2e800}</Project>
       <Name>GigHunter.Service.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GigHunter.TestUtilities\GigHunter.TestUtilities.csproj">
+      <Project>{86EECE8D-86DC-4F99-AF6A-FFA7120515AC}</Project>
+      <Name>GigHunter.TestUtilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
