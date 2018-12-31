@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace GigHunter.DomainModels.Models
 {
-	public class Gig
+	public class Gig : IModel
 	{
 		[BsonId]
 		public ObjectId Id { get; set; }

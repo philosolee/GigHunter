@@ -1,73 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GigHunter.DomainModels.Models;
+using GigHunter.DomainModels.Utilities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace GigHunter.DomainModels.Repositories
 {
-	public class GigRepository : RepositoryBase
+	public class GigRepository : RepositoryBase, IRepository<Gig>
 	{
-		private IMongoCollection<Gig> _gigCollection;
+		private readonly IMongoCollection<Gig> _gigCollection;
 
-		private GigRepository()
+		public GigRepository()
 		{
 			_gigCollection = mongoDatabase.GetCollection<Gig>("gigs");
 		}
 
-		public static GigRepository New()
-		{
-			return new GigRepository();
-		}
-
-		public async Task InsertGig(Gig gig)
+		public async Task Add(Gig gig)
 		{
 			await _gigCollection.InsertOneAsync(gig);
 		}
 
-		public async Task<List<Gig>> GetGigById(string id)
+		public async Task<List<Gig>> GetAll()
 		{
-			var result = await _gigCollection.Find(FilterForId(id)).ToListAsync();
-			return result;
-		}	
-
-		public async Task<List<Gig>> GetAllGigs()
-		{
-			var filter = Builders<Gig>.Filter.Empty;
-			var result = await _gigCollection.Find(filter).ToListAsync();
+			var result = await _gigCollection.Find(Filter<Gig>.Empty).ToListAsync();
 			return result;
 		}
 
-		public async Task<bool> UpdateGigById(string id, Gig newGigDetails)
+		public async Task<List<Gig>> GetById(ObjectId id)
+		{
+			var result = await _gigCollection.Find(Filter<Gig>.Id(id)).ToListAsync();
+			return result;
+		}
+
+		public async Task<List<Gig>> GetById(string id)
+		{
+			var result = await _gigCollection.Find(Filter<Gig>.IdAsString(id)).ToListAsync();
+			return result;
+		}
+
+		public bool UpdateById(ObjectId id, Gig updatedGig)
 		{
 			var update = Builders<Gig>.Update
-				.Set("Artist", newGigDetails.Artist)
-				.Set("Venue", newGigDetails.Venue)
-				.Set("Date", newGigDetails.Date)
-				.Set("TicketUri", newGigDetails.TicketUri);
-			
-			var result = _gigCollection.UpdateOne(FilterForId(id), update);
+				.Set("Artist", updatedGig.Artist)
+				.Set("Venue", updatedGig.Venue)
+				.Set("Date", updatedGig.Date)
+				.Set("TicketUri", updatedGig.TicketUri);
+
+			var result = _gigCollection.UpdateOne(Filter<Gig>.Id(id), update);
 
 			return result.ModifiedCount != 0;
 		}
 
-		public long DeleteGigById(string id)
+		public bool UpdateById(string id, Gig updatedGig)
 		{
-			var result = _gigCollection.DeleteOne(FilterForId(id));
+			var update = Builders<Gig>.Update
+				.Set("Artist", updatedGig.Artist)
+				.Set("Venue", updatedGig.Venue)
+				.Set("Date", updatedGig.Date)
+				.Set("TicketUri", updatedGig.TicketUri);
+			
+			var result = _gigCollection.UpdateOne(Filter<Gig>.IdAsString(id), update);
+
+			return result.ModifiedCount != 0;
+		}
+
+		public long DeleteById(ObjectId id)
+		{
+			var result = _gigCollection.DeleteOne(Filter<Gig>.Id(id));
 			return result.DeletedCount;
 		}
 
-		private static FilterDefinition<Gig> FilterForId(string id)
+		public long DeleteById(string id)
 		{
-			return Builders<Gig>.Filter.Eq("Id", IdAsObjectId(id));
+			var result = _gigCollection.DeleteOne(Filter<Gig>.IdAsString(id));
+			return result.DeletedCount;
 		}
-
-		private static ObjectId IdAsObjectId(string id)
-		{
-			return new ObjectId(id);
-		}
-
-
 	}
 }

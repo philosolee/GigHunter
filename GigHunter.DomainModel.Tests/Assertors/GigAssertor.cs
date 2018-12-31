@@ -4,25 +4,25 @@ using System;
 
 namespace GigHunter.DomainModel.Tests.Assertors
 {
-	public class GigAssertor
+	public class GigAssertor : IModelAssertor
 	{
 		private Gig _expected;
 		private Gig _actual;
 
-		public static GigAssertor New()
+		public static IModelAssertor New()
 		{
 			return new GigAssertor();
 		}
 
-		public GigAssertor Expected(Gig expected)
+		public IModelAssertor Expected(IModel expected)
 		{
-			_expected = expected;
+			_expected = (Gig)expected;
 			return this;
 		}
 
-		public GigAssertor Actual(Gig actual)
+		public IModelAssertor Actual(IModel actual)
 		{
-			_actual = actual;
+			_actual = (Gig)actual;
 			return this;
 		}
 
@@ -34,5 +34,6 @@ namespace GigHunter.DomainModel.Tests.Assertors
 			Assert.AreEqual(_expected.Date, _actual.Date);
 			Assert.AreEqual(_expected.TicketUri, _actual.TicketUri);
 		}
+
 	}
 }

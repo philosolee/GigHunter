@@ -11,170 +11,322 @@ namespace GigHunter.DomainModel.Tests.Repositories
 	[TestFixture]
 	public class GigRepositoryTests
 	{
-		[Test]
-		public void InsertGig_SingleValidGig_ShouldBeInsertedIntoDatabase()
-		{
-			// Setup	
-			var gig = TestGigOne();
+		private GigRepository _gigRepository;
+		private MongoDatabaseUtilities<Gig> _mongoDatabaseUtilities;
+		private Gig _testGigOne;
+		private Gig _testGigTwo;
+		private Gig _testGigThree;
 
+		[SetUp]
+		public void Setup()
+		{
+			_gigRepository = new GigRepository();
+			_mongoDatabaseUtilities = new MongoDatabaseUtilities<Gig>("gigs");
+
+			_testGigOne = TestGigOne();
+			_testGigTwo = TestGigTwo();
+			_testGigThree = TestGigThree();
+		}
+
+		[Test]
+		public void Add_SingleValidGig_ShouldBeInsertedIntoDatabase()
+		{
 			// Perform
-			GigRepository.New()
-				.InsertGig(gig)
-				.Wait();
+			_gigRepository.Add(_testGigOne).Wait();
 			
 			// Verify - retrived via test code, not production code
-			var retrivedGig = MongoDatabaseUtilities.New().FindRecordById<Gig>(gig.Id, "gigs");
+			var retrivedGig = _mongoDatabaseUtilities.FindRecordById(_testGigOne.Id);
 
 			GigAssertor.New()
-				.Expected(gig)
+				.Expected(_testGigOne)
 				.Actual(retrivedGig[0])
 				.DoAssert();
 		}
 		
 		[Test]
-		public void GetGigById_ExistsInDatabase_ShouldReturnSingleGigInList()
+		public void GetAll_ThreeItemsInCollection_ShouldReturnAllThree()
 		{
-			// Setup
-			var gig = TestGigOne();
+			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigTwo).Wait();
+			_gigRepository.Add(_testGigThree).Wait();
 
-			GigRepository.New()
-				.InsertGig(gig)
-				.Wait();
-
-			// Perform - Retrieved by production code
-			var idAsString = gig.Id.ToString();
-			var retrivedGig = GigRepository.New().GetGigById(idAsString).Result;
-
-			// Verify
-			GigAssertor.New()
-				.Expected(gig)
-				.Actual(retrivedGig[0])
-				.DoAssert();
-		}	
-
-		[Test]
-		public void GetGigById_DoesntExistInDatabase_ShouldReturnEmptyList()
-		{
-			var id = new ObjectId().ToString();
-			var retrivedGig = GigRepository.New().GetGigById(id).Result;
-
-			// Empty List returned
-			Assert.AreEqual(0, retrivedGig.Count);
-		}
-
-		[Test]
-		public void GetAllGigs_ThreeItemsInCollection_ShouldReturnAllThree()
-		{
-			var gig1 = TestGigOne();
-			var gig2 = TestGigTwo();
-			var gig3 = TestGigThree();
-
-			GigRepository.New().InsertGig(gig1).Wait();
-			GigRepository.New().InsertGig(gig2).Wait();
-			GigRepository.New().InsertGig(gig3).Wait();
-
-
-			var retrivedGigs = GigRepository.New().GetAllGigs().Result;
+			var retrivedGigs = _gigRepository.GetAll().Result;
 
 			Assert.AreEqual(3, retrivedGigs.Count);
 
 			GigAssertor.New()
-				.Expected(gig1)
-				.Actual(retrivedGigs.Find(g => g.Id == gig1.Id))
+				.Expected(_testGigOne)
+				.Actual(retrivedGigs.Find(g => g.Id == _testGigOne.Id))
 				.DoAssert();
 
 			GigAssertor.New()
-				.Expected(gig2)
-				.Actual(retrivedGigs.Find(g => g.Id == gig2.Id))
+				.Expected(_testGigTwo)
+				.Actual(retrivedGigs.Find(g => g.Id == _testGigTwo.Id))
 				.DoAssert();
 
 			GigAssertor.New()
-				.Expected(gig3)
-				.Actual(retrivedGigs.Find(g => g.Id == gig3.Id))
+				.Expected(_testGigThree)
+				.Actual(retrivedGigs.Find(g => g.Id == _testGigThree.Id))
 				.DoAssert();
 		}
 
 		[Test]
-		public void UpdateGigById_ValidId_ShouldUpdateAndReturnTrue()
+		public void GetAll_EmptyDatabase_ShouldReturnEmptyList()
 		{
-			var gig = TestGigOne();
-			GigRepository.New().InsertGig(gig).Wait();
+			var result = _gigRepository.GetAll().Result;
+			CollectionAssert.IsEmpty(result);
+		}
+		
+		[Test]
+		public void GetById_ValidObjectId_ShouldReturnSingleGigInList()
+		{
+			_gigRepository.Add(_testGigOne).Wait();
+			// This has the same details but a different Id to the above
+			_gigRepository.Add(TestGigOne()).Wait();
+
+			// Perform
+			var result = _gigRepository.GetById(_testGigOne.Id).Result;
+
+			// Verify
+			Assert.AreEqual(1, result.Count);
+			GigAssertor.New()
+				.Expected(_testGigOne)
+				.Actual(result[0])
+				.DoAssert();
+		}
+
+		[Test]
+		public void GetById_ValidStringId_ShouldReturnSingleGigInList()
+		{
+			_gigRepository.Add(_testGigOne).Wait();
+			// This has the same details but a different Id to the above
+			_gigRepository.Add(TestGigOne()).Wait();
+
+			// Perform
+			var idAsString = _testGigOne.Id.ToString();
+			var result = _gigRepository.GetById(idAsString).Result;
+
+			// Verify
+			Assert.AreEqual(1, result.Count);
+			GigAssertor.New()
+				.Expected(_testGigOne)
+				.Actual(result[0])
+				.DoAssert();
+		}
+
+		[Test]
+		public void GetId_InvalidObjectId_ShouldReturnEmptyList()
+		{
+			_gigRepository.Add(_testGigOne).Wait();
+
+			var id = new ObjectId();
+			var result = _gigRepository.GetById(id).Result;
+
+			// Empty List returned
+			CollectionAssert.IsEmpty(result);
+		}
+
+		[Test]
+		public void GetId_InvalidStringId_ShouldReturnEmptyList()
+		{
+			_gigRepository.Add(_testGigOne).Wait();
+
+			var id = new ObjectId().ToString();
+			var result = _gigRepository.GetById(id).Result;
+
+			// Empty List returned
+			CollectionAssert.IsEmpty(result);
+		}
+		
+		[Test]
+		public void UpdateById_ValidObjectId_ShouldUpdateAndReturnTrue()
+		{
+			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigTwo).Wait();
 
 			// Change values now inserted
-			gig.Artist = "Radiohead";
-			gig.Venue = "Sheffield";
-			gig.Date = new DateTime(2019, 4, 18);
-			gig.TicketUri = "http://stackoverflow.com";
+			_testGigOne.Artist = "Radiohead";
+			_testGigOne.Venue = "Sheffield";
+			_testGigOne.Date = new DateTime(2019, 4, 18);
+			_testGigOne.TicketUri = "http://stackoverflow.com";
 
 			// Update the record
-			var result = GigRepository.New().UpdateGigById(gig.Id.ToString(), gig).Result;
+			var result = _gigRepository.UpdateById(_testGigOne.Id, _testGigOne);
 
 			// Validate
-			Assert.AreEqual(true, result);
+			Assert.IsTrue(result);
 
-			var databaseRecord = MongoDatabaseUtilities.New().FindRecordById<Gig>(gig.Id, "gigs");
+			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testGigOne.Id);
 			GigAssertor.New()
-				.Expected(gig)
-				.Actual(databaseRecord[0])
+				.Expected(_testGigOne)
+				.Actual(recordFromDatabase[0])
 				.DoAssert();
 		}
 
 		[Test]
-		public void UpdateGigById_InvalidId_ShouldReturnFalse()
+		public void UpdateById_ValidStringId_ShouldUpdateAndReturnTrue()
 		{
-			var id = new ObjectId().ToString();
-			var result = GigRepository.New().UpdateGigById(id, TestGigThree()).Result;
+			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigTwo).Wait();
 
-			Assert.AreEqual(false, result);
+			// Change values now inserted
+			_testGigOne.Artist = "Radiohead";
+			_testGigOne.Venue = "Sheffield";
+			_testGigOne.Date = new DateTime(2019, 4, 18);
+			_testGigOne.TicketUri = "http://stackoverflow.com";
+
+			// Update the record
+			var idAsString = _testGigOne.Id.ToString();
+			var result = _gigRepository.UpdateById(idAsString, _testGigOne);
+
+			// Validate
+			Assert.IsTrue(result);
+
+			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testGigOne.Id);
+			GigAssertor.New()
+				.Expected(_testGigOne)
+				.Actual(recordFromDatabase[0])
+				.DoAssert();
 		}
 
 		[Test]
-		public void DeleteGigById_ValidId_ShouldBeDeletedAndReturnTrue()
+		public void UpdateById_InvalidObjectId_ShouldReturnFalseAndMakeNoChanges()
 		{
-			var gig1 = TestGigOne();
-			var gig2 = TestGigTwo();
+			// Setup
+			_gigRepository.Add(_testGigOne).Wait();
 
-			GigRepository.New().InsertGig(gig1).Wait();
-			GigRepository.New().InsertGig(gig2).Wait();
-
-			var countBefore = MongoDatabaseUtilities.New().CountRecordsInCollection<Gig>("gigs");
+			var newDetails = new Gig
+			{
+				Artist = "Radiohead",
+				Venue = "Sheffield",
+				Date = new DateTime(2019, 4, 18),
+				TicketUri = "http://stackoverflow.com"
+			};
 
 			// Perform
-			var deleteResult = GigRepository.New().DeleteGigById(gig1.Id.ToString());
+			var invalidId = new ObjectId();
+			var result = _gigRepository.UpdateById(invalidId, newDetails);
 
 			// Verify
-			Assert.AreEqual(1, deleteResult);
-			var countAfter = MongoDatabaseUtilities.New().CountRecordsInCollection<Gig>("gigs");
+			Assert.IsFalse(result);
+
+			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testGigOne.Id);
+			GigAssertor.New()
+				.Expected(_testGigOne)
+				.Actual(recordFromDatabase[0])
+				.DoAssert();
+		}
+
+		[Test]
+		public void UpdateById_InvalidStringId_ShouldReturnFalseAndMakeNoChanges()
+		{
+			// Setup
+			_gigRepository.Add(_testGigOne).Wait();
+
+			var newDetails = new Gig
+			{
+				Artist = "Radiohead",
+				Venue = "Sheffield",
+				Date = new DateTime(2019, 4, 18),
+				TicketUri = "http://stackoverflow.com"
+			};
+
+			// Perform
+			var invalidIdAsSting = new ObjectId().ToString();
+			var result = _gigRepository.UpdateById(invalidIdAsSting, newDetails);
+
+			// Verify
+			Assert.IsFalse(result);
+
+			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testGigOne.Id);
+			GigAssertor.New()
+				.Expected(_testGigOne)
+				.Actual(recordFromDatabase[0])
+				.DoAssert();
+		}
+
+		[Test]
+		public void DeleteById_ValidObjectId_ShouldBeDeletedAndReturnTrue()
+		{
+			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigTwo).Wait();
+
+			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
+
+			// Perform
+			var numberDeleted = _gigRepository.DeleteById(_testGigOne.Id);
+
+			// Verify
+			Assert.AreEqual(1, numberDeleted);
+			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
 			Assert.AreEqual(countBefore - 1, countAfter);
 
-			var findResult = MongoDatabaseUtilities.New().FindRecordById<Gig>(gig1.Id, "gigs");
-			Assert.AreEqual(0, findResult.Count);
+			var findResult = _mongoDatabaseUtilities.FindRecordById(_testGigOne.Id);
+			CollectionAssert.IsEmpty(findResult);
 		}
 
 		[Test]
-		public void DeleteGigById_InvalidId_ShouldReturnFalse()
+		public void DeleteById_ValidStringId_ShouldBeDeletedAndReturnTrue()
 		{
-			// Setup - Gig added to ensure no others are removed.
-			GigRepository.New().InsertGig(TestGigOne()).Wait();
-			var countBefore = MongoDatabaseUtilities.New().CountRecordsInCollection<Gig>("gigs");
+			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigTwo).Wait();
+
+			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
 			// Perform
-			var invalidId = new ObjectId().ToString();
-			var deleteResult = GigRepository.New().DeleteGigById(invalidId);
+			var idAsString = _testGigOne.Id.ToString();
+			var numberDeleted = _gigRepository.DeleteById(idAsString);
 
 			// Verify
-			Assert.AreEqual(0, deleteResult);
-			var countAfter = MongoDatabaseUtilities.New().CountRecordsInCollection<Gig>("gigs");
+			Assert.AreEqual(1, numberDeleted);
+			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
+			Assert.AreEqual(countBefore - 1, countAfter);
+
+			var findResult = _mongoDatabaseUtilities.FindRecordById(_testGigOne.Id);
+			CollectionAssert.IsEmpty(findResult);
+		}
+
+		[Test]
+		public void DeleteById_InvalidObjectId_ShouldReturnFalse()
+		{
+			// Setup - Gig added to ensure no others are removed.
+			_gigRepository.Add(_testGigOne).Wait();
+			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
+
+			// Perform
+			var invalidId = new ObjectId();
+			var numberDeleted = _gigRepository.DeleteById(invalidId);
+
+			// Verify
+			Assert.AreEqual(0, numberDeleted);
+			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
 			Assert.AreEqual(countBefore, countAfter);
 		}
 
+		[Test]
+		public void DeleteById_InvalidStringId_ShouldReturnFalse()
+		{
+			// Setup - Gig added to ensure no others are removed.
+			_gigRepository.Add(_testGigOne).Wait();
+			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
+			// Perform
+			var invalidIdAsString = new ObjectId().ToString();
+			var numberDeleted = _gigRepository.DeleteById(invalidIdAsString);
+
+			// Verify
+			Assert.AreEqual(0, numberDeleted);
+			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
+			Assert.AreEqual(countBefore, countAfter);
+		}
+		
 		[TearDown]
 		public void DropCollection()
 		{
-			MongoDatabaseUtilities.New().RemoveCollection<Gig>("gigs");
+			_mongoDatabaseUtilities.RemoveCollection();
 		}
 
+		#region TestData
 		private static Gig TestGigOne()
 		{
 			return new Gig
@@ -207,7 +359,6 @@ namespace GigHunter.DomainModel.Tests.Repositories
 				TicketUri = "http://reddit.com"
 			};
 		}
-
-
+		#endregion
 	}
 }

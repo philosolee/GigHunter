@@ -5,41 +5,39 @@ using System.Collections.Generic;
 
 namespace GigHunter.DomainModel.Tests.Utilities
 {
-	internal class MongoDatabaseUtilities
+	internal class MongoDatabaseUtilities<T>
 	{
-		private static string _connectionString => RepositoryBase.ConnectionString;
-		private static string _databaseName => RepositoryBase.DatabaseName;
 		public IMongoDatabase mongoDatabase;
 
-		private MongoDatabaseUtilities()
+		private static string _connectionString => RepositoryBase.ConnectionString;
+		private static string _databaseName => RepositoryBase.DatabaseName;
+		private readonly string _collectionName;
+
+		public MongoDatabaseUtilities(string collectionName)
 		{
 			var client = new MongoClient(_connectionString);
 			mongoDatabase = client.GetDatabase(_databaseName);
+			_collectionName = collectionName;
 		}
 
-		public static MongoDatabaseUtilities New()
-		{
-			return new MongoDatabaseUtilities();
-		}
-
-		public List<T> FindRecordById<T>(ObjectId id, string CollectionName)
+		public List<T> FindRecordById(ObjectId id)
 		{
 			var filter = Builders<T>.Filter.Eq("Id", id);
-			var collection = mongoDatabase.GetCollection<T>(CollectionName);
+			var collection = mongoDatabase.GetCollection<T>(_collectionName);
 			return collection.Find(filter).ToListAsync().Result;
 		}
 
-		public long CountRecordsInCollection<T>(string collectionName)
+		public long CountRecordsInCollection()
 		{
-			var collection = mongoDatabase.GetCollection<T>(collectionName);
+			var collection = mongoDatabase.GetCollection<T>(_collectionName);
 
 			var filter = Builders<T>.Filter.Empty;
 			return collection.CountDocuments(filter);				
 		}
 
-		public void RemoveCollection<T>(string CollectionName)
+		public void RemoveCollection()
 		{
-			mongoDatabase.DropCollection(CollectionName); 
+			mongoDatabase.DropCollection(_collectionName); 
 		}
 	}
 }
