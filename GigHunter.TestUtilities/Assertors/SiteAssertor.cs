@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GigHunter.DomainModels.Models;
+﻿using GigHunter.DomainModels.Models;
+using GigHunter.DomainModels.Repositories;
 using NUnit.Framework;
 
 
@@ -19,13 +15,13 @@ namespace GigHunter.TestUtilities.Assertors
 			return new SiteAssertor();
 		}
 
-		public IModelAssertor Actual(IModel actual)
+		public IModelAssertor Actual(IEntity actual)
 		{
 			_actual = (Source)actual;
 			return this;
 		}
 
-		public IModelAssertor Expected(IModel expected)
+		public IModelAssertor Expected(IEntity expected)
 		{
 			_expected = (Source)expected;
 			return this;

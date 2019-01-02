@@ -61,9 +61,10 @@
   <ItemGroup>
     <Compile Include="Models\Artist.cs" />
     <Compile Include="Models\Gig.cs" />
-    <Compile Include="Models\IModel.cs" />
+    <Compile Include="Models\EntityBase.cs" />
     <Compile Include="Models\Source.cs" />
     <Compile Include="Repositories\ArtistRepository.cs" />
+    <Compile Include="Repositories\IEntity.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,5 +85,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

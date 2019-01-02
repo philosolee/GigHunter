@@ -1,11 +1,11 @@
-﻿using GigHunter.DomainModels.Models;
+﻿using GigHunter.DomainModels.Repositories;
 
 namespace GigHunter.TestUtilities.Assertors
 {
 	public interface IModelAssertor
 	{
-		IModelAssertor Expected(IModel expected);
-		IModelAssertor Actual(IModel actual);
+		IModelAssertor Expected(IEntity expected);
+		IModelAssertor Actual(IEntity actual);
 		void DoAssert();
 	}
 }

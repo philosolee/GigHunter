@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace GigHunter.DomainModels.Repositories
 {
-	public interface IRepository<T>
+	public interface IRepository<T> where T : EntityBase
 	{
 		Task Add(T item);
 
@@ -12,14 +13,10 @@ namespace GigHunter.DomainModels.Repositories
 
 		Task<List<T>> GetById(ObjectId id);
 
-		Task<List<T>> GetById(string id);
-
 		bool UpdateById(ObjectId id, T updatedItem);
-
-		bool UpdateById(string id, T updatedItem);
 
 		bool DeleteById(ObjectId id);
 
-		bool DeleteById(string id);
+		UpdateDefinition<T> EntityUpdateDefinition(T updatedEntity);
 	}
 }

@@ -9,8 +9,8 @@ namespace GigHunter.TestUtilities.Database
 	{
 		public IMongoDatabase mongoDatabase;
 
-		private static string _connectionString => RepositoryBase.ConnectionString;
-		private static string _databaseName => RepositoryBase.DatabaseName;
+		private static string _connectionString => Properties.Settings.Default.ConnectionString;
+		private static string _databaseName => Properties.Settings.Default.Database;
 		private readonly string _collectionName;
 
 		public MongoDatabaseUtilities(string collectionName)

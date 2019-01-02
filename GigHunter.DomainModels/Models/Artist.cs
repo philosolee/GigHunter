@@ -4,11 +4,8 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace GigHunter.DomainModels.Models
 {
-	public class Artist : IModel
+	public class Artist : EntityBase
 	{
-		[BsonId]
-		public ObjectId Id { get; set; }
-
 		public string Name { get; set; }
 
 		[BsonDateTimeOptions(Kind = DateTimeKind.Local)]

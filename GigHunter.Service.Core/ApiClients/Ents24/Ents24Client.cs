@@ -19,7 +19,7 @@ namespace GigHunter.Service.Core.ApiClients
 
 		private readonly IRestClient client;
 		private Source _source;
-		private SourceRepository _sourceRepository;
+		private IRepository<Source> _sourceRepository;
 
 		public Ents24Client(SourceRepository sourceRepository)
 		{
@@ -32,11 +32,6 @@ namespace GigHunter.Service.Core.ApiClients
 			Authenicate();
 		}
 
-		private void ValidateSource()
-		{
-			if (_source == null) throw new ItemNotFoundException("Unable to find the details for 'Ents24' in the database");
-		}
-
 		public void Authenicate()
 		{
 			if (_source.ApiToken == null || DateTime.Compare(_source.TokenExpiryDate, DateTime.Now) <= 0)
@@ -45,6 +40,11 @@ namespace GigHunter.Service.Core.ApiClients
 				UpdateDatabase(authorisationResponse);
 			}
 			client.Authenticator = new JwtAuthenticator(_source.ApiToken);
+		}
+
+		private void ValidateSource()
+		{
+			if (_source == null) throw new ItemNotFoundException("Unable to find the details for 'Ents24' in the database");
 		}
 
 		private void UpdateDatabase(AuthorisationResponse authorisationResponse)

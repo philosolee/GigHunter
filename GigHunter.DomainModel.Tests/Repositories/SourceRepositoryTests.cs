@@ -92,40 +92,12 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		}
 
 		[Test]
-		public void GetbyId_ValidStringId_ShouldReturnSingleSource()
-		{
-			_siteRepository.Add(_testSiteOne).Wait();
-			// This has same details, but different Id to the above
-			_siteRepository.Add(TestSiteOne()).Wait();
-
-			var idAsString = _testSiteOne.Id.ToString();
-			var result = _siteRepository.GetById(idAsString).Result;
-
-			Assert.AreEqual(1, result.Count);
-			SiteAssertor.New()
-				.Expected(_testSiteOne)
-				.Actual(result[0])
-				.DoAssert();
-		}
-
-		[Test]
 		public void GetById_InvalidObjectId_ShouldReturnEmptyList()
 		{
 			_siteRepository.Add(_testSiteOne).Wait();
 
 			var idToLookFor = new ObjectId();
 			var result = _siteRepository.GetById(idToLookFor).Result;
-
-			Assert.AreEqual(0, result.Count);
-		}
-
-		[Test]
-		public void GetById_InvalidStringId_ShouldReturnEmptyList()
-		{
-			_siteRepository.Add(_testSiteOne).Wait();
-
-			var idAsString = new ObjectId().ToString();
-			var result = _siteRepository.GetById(idAsString).Result;
 
 			Assert.AreEqual(0, result.Count);
 		}
@@ -146,7 +118,6 @@ namespace GigHunter.DomainModel.Tests.Repositories
 				.DoAssert();
 		}
 
-
 		[Test]
 		public void GetByName_ValidNameMultiplePresent_ShouldReturnMultipleSources()
 		{
@@ -165,7 +136,6 @@ namespace GigHunter.DomainModel.Tests.Repositories
 
 			Assert.AreNotEqual(result[0].Id, result[1].Id);
 		}
-
 
 		[Test]
 		public void GetByName_InvalidName_ShouldReturnSingleSource()
@@ -190,30 +160,6 @@ namespace GigHunter.DomainModel.Tests.Repositories
 
 			var result = _siteRepository.UpdateById(_testSiteOne.Id, _testSiteOne);
 			Assert.IsTrue(result);
-
-			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testSiteOne.Id);
-			SiteAssertor.New()
-				.Expected(_testSiteOne)
-				.Actual(recordFromDatabase[0])
-				.DoAssert();
-		}
-
-		[Test]
-		public void UpdateById_ValidStringId_ShouldUpdateAndReturnTrue()
-		{
-			// Setup
-			_siteRepository.Add(_testSiteOne).Wait();
-			_siteRepository.Add(_testSiteTwo).Wait();
-
-			_testSiteOne.Name = "Altered Name One";
-			_testSiteOne.BaseUrl = "https://www.changedurlone.com";
-
-			// Perform
-			var idAsString = _testSiteOne.Id.ToString();
-			var result = _siteRepository.UpdateById(idAsString, _testSiteOne);
-
-			// Verify
-			Assert.AreEqual(true, result);
 
 			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testSiteOne.Id);
 			SiteAssertor.New()
@@ -249,32 +195,6 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		}
 
 		[Test]
-		public void UpdateById_InvalidStringId_ShouldReturnFalseAndNotUpdate()
-		{
-			// Setup
-			_siteRepository.Add(_testSiteOne).Wait();
-
-			var updatedDetails = new Source
-			{
-				Name = "Altered Name One",
-				BaseUrl = "https://www.changedurlone.com"
-			};
-
-			// Perform
-			var invalidIdAsString = new ObjectId().ToString();
-			var result = _siteRepository.UpdateById(invalidIdAsString, updatedDetails);
-
-			// Verify
-			Assert.IsFalse(result);
-
-			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testSiteOne.Id);
-			SiteAssertor.New()
-				.Expected(_testSiteOne)
-				.Actual(recordFromDatabase[0])
-				.DoAssert();
-		}
-
-		[Test]
 		public void DeleteById_ValidObjectId_ShouldBeDeletedAndReturnNumberOfRecordsDeleted()
 		{
 			_siteRepository.Add(_testSiteOne).Wait();
@@ -284,28 +204,6 @@ namespace GigHunter.DomainModel.Tests.Repositories
 
 			// Perform
 			var result = _siteRepository.DeleteById(_testSiteOne.Id);
-
-			// Verify
-			Assert.IsTrue(result);
-
-			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
-			Assert.AreEqual(countBefore - 1, countAfter);
-
-			var findResult = _mongoDatabaseUtilities.FindRecordById(_testSiteOne.Id);
-			CollectionAssert.IsEmpty(findResult);
-		}
-
-		[Test]
-		public void DeleteById_ValidStringId_ShouldBeDeletedAndReturnNumberOfRecordsDeleted()
-		{
-			_siteRepository.Add(_testSiteOne).Wait();
-			_siteRepository.Add(_testSiteTwo).Wait();
-
-			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
-
-			// Perform
-			var idAsString = _testSiteOne.Id.ToString();
-			var result = _siteRepository.DeleteById(idAsString);
 
 			// Verify
 			Assert.IsTrue(result);
@@ -328,25 +226,6 @@ namespace GigHunter.DomainModel.Tests.Repositories
 			// Perform
 			var invalidId = new ObjectId();
 			var result = _siteRepository.DeleteById(invalidId);
-
-			// Verify
-			Assert.IsFalse(result);
-
-			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
-			Assert.AreEqual(countBefore, countAfter);
-		}
-
-		[Test]
-		public void DeleteById_InvalidStringId_ShouldReturnZeroAndNotDeleteAnything()
-		{
-			_siteRepository.Add(_testSiteOne).Wait();
-			_siteRepository.Add(_testSiteTwo).Wait();
-
-			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
-
-			// Perform
-			var idAsString = new ObjectId().ToString();
-			var result = _siteRepository.DeleteById(idAsString);
 
 			// Verify
 			Assert.IsFalse(result);

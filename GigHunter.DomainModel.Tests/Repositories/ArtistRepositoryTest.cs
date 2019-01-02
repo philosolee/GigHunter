@@ -92,40 +92,12 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		}
 
 		[Test]
-		public void GetbyId_ValidStringId_ShouldReturnSingleArtist()
-		{
-			_artistRepository.Add(_testArtistOne).Wait();
-			// This has same details, but different Id to the above
-			_artistRepository.Add(TestArtistOne()).Wait();
-
-			var idAsString = _testArtistOne.Id.ToString();
-			var result = _artistRepository.GetById(idAsString).Result;
-
-			Assert.AreEqual(1, result.Count);
-			ArtistAssertor.New()
-				.Expected(_testArtistOne)
-				.Actual(result[0])
-				.DoAssert();
-		}
-
-		[Test]
 		public void GetById_InvalidObjectId_ShouldReturnEmptyList()
 		{
 			_artistRepository.Add(_testArtistOne).Wait();
 
 			var idToLookFor = new ObjectId();
 			var result = _artistRepository.GetById(idToLookFor).Result;
-
-			Assert.AreEqual(0, result.Count);
-		}
-
-		[Test]
-		public void GetById_InvalidStringId_ShouldReturnEmptyList()
-		{
-			_artistRepository.Add(_testArtistOne).Wait();
-
-			var idAsString = new ObjectId().ToString();
-			var result = _artistRepository.GetById(idAsString).Result;
 
 			Assert.AreEqual(0, result.Count);
 		}
@@ -141,30 +113,6 @@ namespace GigHunter.DomainModel.Tests.Repositories
 
 			var result = _artistRepository.UpdateById(_testArtistOne.Id, _testArtistOne);
 			Assert.IsTrue(result);
-
-			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testArtistOne.Id);
-			ArtistAssertor.New()
-				.Expected(_testArtistOne)
-				.Actual(recordFromDatabase[0])
-				.DoAssert();
-		}
-
-		[Test]
-		public void UpdateById_ValidStringId_ShouldUpdateAndReturnTrue()
-		{
-			// Setup
-			_artistRepository.Add(_testArtistOne).Wait();
-			_artistRepository.Add(_testArtistTwo).Wait();
-
-			_testArtistOne.Name = "Ringo Star";
-			_testArtistOne.LastSearchedForDate = new DateTime(2019, 08, 10);
-
-			// Perform
-			var idAsString = _testArtistOne.Id.ToString();
-			var result = _artistRepository.UpdateById(idAsString, _testArtistOne);
-
-			// Verify
-			Assert.AreEqual(true, result);
 
 			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testArtistOne.Id);
 			ArtistAssertor.New()
@@ -200,33 +148,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		}
 
 		[Test]
-		public void UpdateById_InvalidStringId_ShouldReturnFalseAndNotUpdate()
-		{
-			// Setup
-			_artistRepository.Add(_testArtistOne).Wait();
-
-			var updatedDetails = new Artist
-			{
-				Name = "Ringo Star",
-				LastSearchedForDate = new DateTime(2019, 08, 10)
-			};
-
-			// Perform
-			var invalidIdAsString = new ObjectId().ToString();
-			var result = _artistRepository.UpdateById(invalidIdAsString, updatedDetails);
-
-			// Verify
-			Assert.IsFalse(result);
-
-			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testArtistOne.Id);
-			ArtistAssertor.New()
-				.Expected(_testArtistOne)
-				.Actual(recordFromDatabase[0])
-				.DoAssert();
-		}
-
-		[Test]
-		public void DeleteById_ValidObjectId_ShouldBeDeletedAndReturnNumberOfRecordsDeleted()
+		public void DeleteById_ValidObjectId_ShouldBeDeletedAndReturnTrue()
 		{
 			_artistRepository.Add(_testArtistOne).Wait();
 			_artistRepository.Add(_testArtistTwo).Wait();
@@ -247,29 +169,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		}
 
 		[Test]
-		public void DeleteById_ValidStringId_ShouldBeDeletedAndReturnNumberOfRecordsDeleted()
-		{
-			_artistRepository.Add(_testArtistOne).Wait();
-			_artistRepository.Add(_testArtistTwo).Wait();
-
-			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
-
-			// Perform
-			var idAsString = _testArtistOne.Id.ToString();
-			var result = _artistRepository.DeleteById(idAsString);
-
-			// Verify
-			Assert.IsTrue(result);
-
-			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
-			Assert.AreEqual(countBefore - 1, countAfter);
-
-			var findResult = _mongoDatabaseUtilities.FindRecordById(_testArtistOne.Id);
-			CollectionAssert.IsEmpty(findResult);
-		}
-
-		[Test]
-		public void DeleteById_InvalidObjectId_ShouldReturnZeroAndNotDeleteAnything()
+		public void DeleteById_InvalidObjectId_ShouldNotDeleteAnythingAndReturnFalse()
 		{
 			_artistRepository.Add(_testArtistOne).Wait();
 			_artistRepository.Add(_testArtistTwo).Wait();
@@ -279,25 +179,6 @@ namespace GigHunter.DomainModel.Tests.Repositories
 			// Perform
 			var invalidId = new ObjectId();
 			var result = _artistRepository.DeleteById(invalidId);
-
-			// Verify
-			Assert.IsFalse(result);
-
-			var countAfter = _mongoDatabaseUtilities.CountRecordsInCollection();
-			Assert.AreEqual(countBefore, countAfter);
-		}
-
-		[Test]
-		public void DeleteById_InvalidStringId_ShouldReturnZeroAndNotDeleteAnything()
-		{
-			_artistRepository.Add(_testArtistOne).Wait();
-			_artistRepository.Add(_testArtistTwo).Wait();
-
-			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
-
-			// Perform
-			var idAsString = new ObjectId().ToString();
-			var result = _artistRepository.DeleteById(idAsString);
 
 			// Verify
 			Assert.IsFalse(result);

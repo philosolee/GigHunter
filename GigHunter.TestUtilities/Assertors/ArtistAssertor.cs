@@ -1,4 +1,5 @@
 ﻿using GigHunter.DomainModels.Models;
+using GigHunter.DomainModels.Repositories;
 using NUnit.Framework;
 
 namespace GigHunter.TestUtilities.Assertors
@@ -13,13 +14,13 @@ namespace GigHunter.TestUtilities.Assertors
 			return new ArtistAssertor();
 		}
 
-		public IModelAssertor Actual(IModel actual)
+		public IModelAssertor Actual(IEntity actual)
 		{
 			_actual = (Artist)actual;
 			return this;
 		}
 
-		public IModelAssertor Expected(IModel expected)
+		public IModelAssertor Expected(IEntity expected)
 		{
 			_expected = (Artist)expected;
 			return this;

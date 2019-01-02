@@ -4,11 +4,8 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace GigHunter.DomainModels.Models
 {
-	public class Source : IModel
+	public class Source : EntityBase
 	{
-		[BsonId]
-		public ObjectId Id { get; set; }
-
 		public string Name { get; set; }
 
 		public string BaseUrl { get; set; }
