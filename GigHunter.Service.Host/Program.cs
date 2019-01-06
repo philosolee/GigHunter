@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GigHunter.DomainModels.Repositories;
+using GigHunter.Service.Core;
 
 namespace GigHunter.Service.Host
 {
@@ -10,6 +7,8 @@ namespace GigHunter.Service.Host
 	{
 		static void Main(string[] args)
 		{
+			var siteCrawler = new SiteCrawler(new ArtistRepository(), new SourceRepository(), new GigRepository());
+			siteCrawler.CrawlSites();
 		}
 	}
 }

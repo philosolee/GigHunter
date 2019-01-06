@@ -11,7 +11,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 	[TestFixture]
 	public class SourceRepositoryTest
 	{
-		private SourceRepository _siteRepository;
+		private IRepository<Source> _sourceRepository;
 		private MongoDatabaseUtilities<Source> _mongoDatabaseUtilities;
 		private Source _testSiteOne;
 		private Source _testSiteTwo;
@@ -20,7 +20,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[SetUp]
 		public void ResetTestSources()
 		{
-			_siteRepository = new SourceRepository();
+			_sourceRepository = new SourceRepository();
 			_mongoDatabaseUtilities = new MongoDatabaseUtilities<Source>("sources");
 
 			_testSiteOne = TestSiteOne();
@@ -31,7 +31,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void Add_SingleValidSource_ShouldBeInserted()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
 
 			var retrievedSource = _mongoDatabaseUtilities.FindRecordById(_testSiteOne.Id);
 
@@ -44,11 +44,11 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void GetAll_ThreeItemsInCollection_ShouldReturnAllThree()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
-			_siteRepository.Add(_testSiteTwo).Wait();
-			_siteRepository.Add(_testSiteThree).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteTwo).Wait();
+			_sourceRepository.Add(_testSiteThree).Wait();
 
-			var resultFromDatabase = _siteRepository.GetAll().Result;
+			var resultFromDatabase = _sourceRepository.GetAll().Result;
 
 			Assert.AreEqual(3, resultFromDatabase.Count);
 
@@ -71,18 +71,18 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void GetAll_EmptyDatabase_ShouldReturnEmptyList()
 		{
-			var resultFromDatabase = _siteRepository.GetAll().Result;
+			var resultFromDatabase = _sourceRepository.GetAll().Result;
 			CollectionAssert.IsEmpty(resultFromDatabase);
 		}
 
 		[Test]
 		public void GetbyId_ValidObjectId_ShouldReturnSingleSource()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
 			// This has same details, but different Id to the above
-			_siteRepository.Add(TestSiteOne()).Wait();
+			_sourceRepository.Add(TestSiteOne()).Wait();
 
-			var result = _siteRepository.GetById(_testSiteOne.Id).Result;
+			var result = _sourceRepository.GetById(_testSiteOne.Id).Result;
 
 			Assert.AreEqual(1, result.Count);
 			SiteAssertor.New()
@@ -94,10 +94,10 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void GetById_InvalidObjectId_ShouldReturnEmptyList()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
 
 			var idToLookFor = new ObjectId();
-			var result = _siteRepository.GetById(idToLookFor).Result;
+			var result = _sourceRepository.GetById(idToLookFor).Result;
 
 			Assert.AreEqual(0, result.Count);
 		}
@@ -105,11 +105,11 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void GetByName_ValidName_ShouldReturnSingleSource()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
 			// This has same details, but different Id to the above
-			_siteRepository.Add(_testSiteTwo).Wait();
+			_sourceRepository.Add(_testSiteTwo).Wait();
 
-			var result = _siteRepository.GetByName(_testSiteOne.Name).Result;
+			var result = _sourceRepository.GetByName(_testSiteOne.Name).Result;
 
 			Assert.AreEqual(1, result.Count);
 			SiteAssertor.New()
@@ -121,11 +121,11 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void GetByName_ValidNameMultiplePresent_ShouldReturnMultipleSources()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
 			// This has same details, but different Id to the above
-			_siteRepository.Add(TestSiteOne()).Wait();
+			_sourceRepository.Add(TestSiteOne()).Wait();
 
-			var result = _siteRepository.GetByName(_testSiteOne.Name).Result;
+			var result = _sourceRepository.GetByName(_testSiteOne.Name).Result;
 
 			Assert.AreEqual(2, result.Count);
 			
@@ -140,11 +140,11 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void GetByName_InvalidName_ShouldReturnSingleSource()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
 			// This has same details, but different Id to the above
-			_siteRepository.Add(TestSiteOne()).Wait();
+			_sourceRepository.Add(TestSiteOne()).Wait();
 
-			var result = _siteRepository.GetByName("invalidName").Result;
+			var result = _sourceRepository.GetByName("invalidName").Result;
 
 			Assert.AreEqual(0, result.Count);
 		}
@@ -152,13 +152,13 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void UpdateById_ValidObjectId_ShouldUpdateAndReturnTrue()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
-			_siteRepository.Add(_testSiteTwo).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteTwo).Wait();
 
 			_testSiteOne.Name = "Altered Name One";
 			_testSiteOne.BaseUrl = "https://www.changedurlone.com";
 
-			var result = _siteRepository.UpdateById(_testSiteOne.Id, _testSiteOne);
+			var result = _sourceRepository.UpdateById(_testSiteOne.Id, _testSiteOne);
 			Assert.IsTrue(result);
 
 			var recordFromDatabase = _mongoDatabaseUtilities.FindRecordById(_testSiteOne.Id);
@@ -172,7 +172,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		public void UpdateById_InvalidObjectId_ShouldReturnFalseAndNotUpdate()
 		{
 			// Setup
-			_siteRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
 
 			var updatedDetails = new Source
 			{
@@ -182,7 +182,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 
 			// Perform
 			var invalidObjectId = new ObjectId();
-			var result = _siteRepository.UpdateById(invalidObjectId, _testSiteOne);
+			var result = _sourceRepository.UpdateById(invalidObjectId, _testSiteOne);
 
 			// Verify
 			Assert.IsFalse(result);
@@ -197,13 +197,13 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void DeleteById_ValidObjectId_ShouldBeDeletedAndReturnNumberOfRecordsDeleted()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
-			_siteRepository.Add(_testSiteTwo).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteTwo).Wait();
 
 			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
 			// Perform
-			var result = _siteRepository.DeleteById(_testSiteOne.Id);
+			var result = _sourceRepository.DeleteById(_testSiteOne.Id);
 
 			// Verify
 			Assert.IsTrue(result);
@@ -218,14 +218,14 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void DeleteById_InvalidObjectId_ShouldReturnZeroAndNotDeleteAnything()
 		{
-			_siteRepository.Add(_testSiteOne).Wait();
-			_siteRepository.Add(_testSiteTwo).Wait();
+			_sourceRepository.Add(_testSiteOne).Wait();
+			_sourceRepository.Add(_testSiteTwo).Wait();
 
 			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
 			// Perform
 			var invalidId = new ObjectId();
-			var result = _siteRepository.DeleteById(invalidId);
+			var result = _sourceRepository.DeleteById(invalidId);
 
 			// Verify
 			Assert.IsFalse(result);

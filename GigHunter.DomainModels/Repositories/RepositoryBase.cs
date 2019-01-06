@@ -22,22 +22,27 @@ namespace GigHunter.DomainModels
 			MongoCollection = mongoDatabase.GetCollection<T>(collectionName);
 		}
 
-		public async Task Add(T Entity)
+		public virtual async Task Add(T Entity)
 		{
 			await MongoCollection.InsertOneAsync(Entity);
 		}
 
-		public async Task<List<T>> GetAll()
+		public virtual async Task<List<T>> GetAll()
 		{
 			return await MongoCollection.Find(Filter<T>.Empty).ToListAsync();
 		}
 
-		public async Task<List<T>> GetById(ObjectId id)
+		public virtual async Task<List<T>> GetById(ObjectId id)
 		{
 			return await MongoCollection.Find(Filter<T>.Id(id)).ToListAsync();
 		}
-		
-		public bool UpdateById(ObjectId id, T updatedEntity)
+
+		public virtual async Task<List<T>> GetByName(string sourceName)
+		{
+			return await MongoCollection.Find(Filter<T>.Name(sourceName)).ToListAsync();
+		}
+
+		public virtual bool UpdateById(ObjectId id, T updatedEntity)
 		{
 			var updateDefinition = EntityUpdateDefinition(updatedEntity);
 			var result = MongoCollection.UpdateOne(Filter<T>.Id(id), updateDefinition);
@@ -46,7 +51,7 @@ namespace GigHunter.DomainModels
 
 		public abstract UpdateDefinition<T> EntityUpdateDefinition(T updatedEntity);
 
-		public bool DeleteById(ObjectId id)
+		public virtual bool DeleteById(ObjectId id)
 		{
 			var result = MongoCollection.DeleteOne(Filter<T>.Id(id));
 			return result.DeletedCount == 1;

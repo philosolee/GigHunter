@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using GigHunter.DomainModels.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -12,6 +13,8 @@ namespace GigHunter.DomainModels.Repositories
 		Task<List<T>> GetAll();
 
 		Task<List<T>> GetById(ObjectId id);
+
+		Task<List<T>> GetByName(string name);
 
 		bool UpdateById(ObjectId id, T updatedItem);
 

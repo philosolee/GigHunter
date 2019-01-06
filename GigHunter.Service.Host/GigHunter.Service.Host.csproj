@@ -56,6 +56,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GigHunter.DomainModels\GigHunter.DomainModels.csproj">
+      <Project>{9CEFC23D-37C8-4A9D-BB48-FEE0D88A50C8}</Project>
+      <Name>GigHunter.DomainModels</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GigHunter.Service.Core\GigHunter.Service.Core.csproj">
       <Project>{c3be6a76-fad4-4935-80ed-31df3ca2e800}</Project>
       <Name>GigHunter.Service.Core</Name>

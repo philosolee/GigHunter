@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigHunter.DomainModels", "GigHunter.DomainModels\GigHunter.DomainModels.csproj", "{9CEFC23D-37C8-4A9D-BB48-FEE0D88A50C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigHunter.DomainModel.Tests", "GigHunter.DomainModel.Tests\GigHunter.DomainModel.Tests.csproj", "{CE61EACE-CED3-441F-B472-0F31019C0CCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigHunter.Database.Tests", "GigHunter.DomainModel.Tests\GigHunter.Database.Tests.csproj", "{CE61EACE-CED3-441F-B472-0F31019C0CCA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{732BE3D7-8E79-4C3D-801F-5BBE5D5C799C}"
 EndProject

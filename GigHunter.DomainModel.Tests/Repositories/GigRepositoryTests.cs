@@ -12,7 +12,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 	[TestFixture]
 	public class GigRepositoryTests
 	{
-		private IRepository<Gig> _gigRepository;
+		private GigRepository _gigRepository;
 		private MongoDatabaseUtilities<Gig> _mongoDatabaseUtilities;
 		private Gig _testGigOne;
 		private Gig _testGigTwo;

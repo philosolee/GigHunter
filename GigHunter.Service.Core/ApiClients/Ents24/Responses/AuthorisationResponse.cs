@@ -1,6 +1,6 @@
 ﻿using RestSharp.Deserializers;
 
-namespace GigHunter.Service.Core.ApiClients.Ents24
+namespace GigHunter.Service.Core.ApiClients.Ents24.Responses
 {
 	public class AuthorisationResponse
 	{
