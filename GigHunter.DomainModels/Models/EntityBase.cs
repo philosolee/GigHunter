@@ -1,5 +1,6 @@
 ﻿using GigHunter.DomainModels.Repositories;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace GigHunter.DomainModels
@@ -9,4 +10,5 @@ namespace GigHunter.DomainModels
 		[BsonId]
 		public ObjectId Id { get; set; }
 	}
+
 }

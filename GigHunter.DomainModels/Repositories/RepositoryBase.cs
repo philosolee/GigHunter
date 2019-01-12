@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GigHunter.DomainModels.Repositories;
 using GigHunter.DomainModels.Utilities;
@@ -15,31 +16,39 @@ namespace GigHunter.DomainModels
 		public readonly IMongoCollection<T> MongoCollection;
 		private IMongoDatabase mongoDatabase;
 
-		public RepositoryBase(string collectionName)
+		protected RepositoryBase(string collectionName)
 		{
 			var client = new MongoClient(ConnectionString);
 			mongoDatabase = client.GetDatabase(DatabaseName);
 			MongoCollection = mongoDatabase.GetCollection<T>(collectionName);
 		}
 
-		public virtual async Task Add(T Entity)
+		public virtual void Add(T Entity)
 		{
-			await MongoCollection.InsertOneAsync(Entity);
+			MongoCollection.InsertOneAsync(Entity).Wait();
 		}
 
-		public virtual async Task<List<T>> GetAll()
+		public virtual List<T> GetAll()
 		{
-			return await MongoCollection.Find(Filter<T>.Empty).ToListAsync();
+			return MongoCollection.Find(Filter<T>.Empty).ToListAsync().Result;
 		}
 
-		public virtual async Task<List<T>> GetById(ObjectId id)
+		public virtual T GetById(ObjectId id)
 		{
-			return await MongoCollection.Find(Filter<T>.Id(id)).ToListAsync();
+			var result = MongoCollection.Find(Filter<T>.Id(id)).ToListAsync().Result;
+
+			return result.FirstOrDefault(x => x.Id == id);
+
 		}
 
-		public virtual async Task<List<T>> GetByName(string sourceName)
+		public virtual bool Exists(ObjectId id)
 		{
-			return await MongoCollection.Find(Filter<T>.Name(sourceName)).ToListAsync();
+			return MongoCollection.CountDocuments(Filter<T>.Id(id)) != 0;
+		}
+
+		public virtual List<T> GetByName(string sourceName)
+		{
+			return MongoCollection.Find(Filter<T>.Name(sourceName)).ToListAsync().Result;
 		}
 
 		public virtual bool UpdateById(ObjectId id, T updatedEntity)

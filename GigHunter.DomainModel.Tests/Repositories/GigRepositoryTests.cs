@@ -33,7 +33,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		public void Add_SingleValidGig_ShouldBeInsertedIntoDatabase()
 		{
 			// Perform
-			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigOne);
 			
 			// Verify - retrived via test code, not production code
 			var retrivedGig = _mongoDatabaseUtilities.FindRecordById(_testGigOne.Id);
@@ -47,11 +47,11 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void GetAll_ThreeItemsInCollection_ShouldReturnAllThree()
 		{
-			_gigRepository.Add(_testGigOne).Wait();
-			_gigRepository.Add(_testGigTwo).Wait();
-			_gigRepository.Add(_testGigThree).Wait();
+			_gigRepository.Add(_testGigOne);
+			_gigRepository.Add(_testGigTwo);
+			_gigRepository.Add(_testGigThree);
 
-			var retrivedGigs = _gigRepository.GetAll().Result;
+			var retrivedGigs = _gigRepository.GetAll();
 
 			Assert.AreEqual(3, retrivedGigs.Count);
 
@@ -74,45 +74,44 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void GetAll_EmptyDatabase_ShouldReturnEmptyList()
 		{
-			var result = _gigRepository.GetAll().Result;
+			var result = _gigRepository.GetAll();
 			CollectionAssert.IsEmpty(result);
 		}
 		
 		[Test]
 		public void GetById_ValidObjectId_ShouldReturnSingleGigInList()
 		{
-			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigOne);
 			// This has the same details but a different Id to the above
-			_gigRepository.Add(TestGigOne()).Wait();
+			_gigRepository.Add(TestGigOne());
 
 			// Perform
-			var result = _gigRepository.GetById(_testGigOne.Id).Result;
+			var result = _gigRepository.GetById(_testGigOne.Id);
 
 			// Verify
-			Assert.AreEqual(1, result.Count);
 			GigAssertor.New()
 				.Expected(_testGigOne)
-				.Actual(result[0])
+				.Actual(result)
 				.DoAssert();
 		}
 
 		[Test]
 		public void GetId_InvalidObjectId_ShouldReturnEmptyList()
 		{
-			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigOne);
 
 			var id = new ObjectId();
-			var result = _gigRepository.GetById(id).Result;
+			var result = _gigRepository.GetById(id);
 
 			// Empty List returned
-			CollectionAssert.IsEmpty(result);
+			Assert.IsNull(result);
 		}
 
 		[Test]
 		public void UpdateById_ValidObjectId_ShouldUpdateAndReturnTrue()
 		{
-			_gigRepository.Add(_testGigOne).Wait();
-			_gigRepository.Add(_testGigTwo).Wait();
+			_gigRepository.Add(_testGigOne);
+			_gigRepository.Add(_testGigTwo);
 
 			// Change values now inserted
 			_testGigOne.Artist = "Radiohead";
@@ -137,7 +136,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		public void UpdateById_InvalidObjectId_ShouldReturnFalseAndMakeNoChanges()
 		{
 			// Setup
-			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigOne);
 
 			var newDetails = new Gig
 			{
@@ -164,8 +163,8 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		[Test]
 		public void DeleteById_ValidObjectId_ShouldBeDeletedAndReturnTrue()
 		{
-			_gigRepository.Add(_testGigOne).Wait();
-			_gigRepository.Add(_testGigTwo).Wait();
+			_gigRepository.Add(_testGigOne);
+			_gigRepository.Add(_testGigTwo);
 
 			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
@@ -185,7 +184,7 @@ namespace GigHunter.DomainModel.Tests.Repositories
 		public void DeleteById_InvalidObjectId_ShouldReturnFalse()
 		{
 			// Setup - Gig added to ensure no others are removed.
-			_gigRepository.Add(_testGigOne).Wait();
+			_gigRepository.Add(_testGigOne);
 			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
 			// Perform

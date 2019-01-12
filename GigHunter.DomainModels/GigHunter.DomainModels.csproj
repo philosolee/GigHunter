@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="Repositories\GigRepository.cs" />
     <Compile Include="Repositories\SourceRepository.cs" />
+    <Compile Include="Utilities\Converters.cs" />
     <Compile Include="Utilities\Filters.cs" />
   </ItemGroup>
   <ItemGroup>

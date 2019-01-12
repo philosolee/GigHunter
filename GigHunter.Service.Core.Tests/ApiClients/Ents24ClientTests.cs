@@ -54,7 +54,7 @@ namespace GigHunter.Service.Core.Tests.ApiClients
 
 			// mockResponse.VerifySet(r => r.Headers = It.Is<List<Parameter>>(a => a.Contains(new Parameter("Authorization", It.IsAny<string>(), ParameterType.HttpHeader))));
 
-			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<ObjectId>(), source), Times.Once);
+			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<ObjectId> (), source), Times.Once);
 			Assert.AreEqual(DateTime.Now.AddDays(60).ToShortDateString(), source.TokenExpiryDate.ToShortDateString());
 		}
 

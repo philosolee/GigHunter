@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using GigHunter.DomainModels.Models;
 using MongoDB.Bson;
@@ -8,13 +9,15 @@ namespace GigHunter.DomainModels.Repositories
 {
 	public interface IRepository<T> where T : EntityBase
 	{
-		Task Add(T item);
+		void Add(T item);
 
-		Task<List<T>> GetAll();
+		List<T> GetAll();
 
-		Task<List<T>> GetById(ObjectId id);
+		T GetById(ObjectId id);
 
-		Task<List<T>> GetByName(string name);
+		List<T> GetByName(string name);
+
+		bool Exists(ObjectId id);
 
 		bool UpdateById(ObjectId id, T updatedItem);
 

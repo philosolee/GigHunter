@@ -9,7 +9,6 @@ namespace GigHunter.DomainModels.Repositories
 
 		public ArtistRepository() : base("artists")
 		{
-			//_artistCollection = mongoDatabase.GetCollection<Artist>("artists");
 		}
 		
 		public override UpdateDefinition<Artist> EntityUpdateDefinition(Artist updatedArtist)

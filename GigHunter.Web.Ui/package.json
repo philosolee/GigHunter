@@ -1,0 +1,12 @@
+{
+  "name": "gig-hunter.web.ui",
+  "version": "0.0.0",
+  "description": "GigHunter.Web.Ui",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14"
+  }
+}

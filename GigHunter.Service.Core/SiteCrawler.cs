@@ -56,12 +56,12 @@ namespace GigHunter.Service.Core
 
 		private void GetSitesToCheck()
 		{
-			_sitesToCheck = _sourceRepository.GetAll().Result;
+			_sitesToCheck = _sourceRepository.GetAll();
 		}
 
 		private void GetArtistsToCheck()
 		{
-			_artistsToCheck = _artistRepository.GetAll().Result;
+			_artistsToCheck = _artistRepository.GetAll();
 		}
 
 		private void UpdateDatabaseWithGigs(List<Gig> gigsFromSource)
@@ -70,7 +70,7 @@ namespace GigHunter.Service.Core
 			{
 				foreach (var gig in gigsFromSource)
 				{
-					var currentGigsForArtist = _gigRepository.GetByName(gig.Artist).Result;
+					var currentGigsForArtist = _gigRepository.GetByName(gig.Artist);
 
 					if (currentGigsForArtist.Contains(gig))
 					{
