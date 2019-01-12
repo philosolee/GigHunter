@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GigHunter.Service.Core.ApiClients;
+using GigHunter.Service.Core.ApiClients.Ents24;
+using GigHunter.Service.Core.Wrappers;
 using GigHunter.DomainModels.Models;
 using GigHunter.DomainModels.Repositories;
-using GigHunter.Service.Core.ApiClients;
-using GigHunter.Service.Core.Wrappers;
 using RestSharp;
 
 namespace GigHunter.Service.Core

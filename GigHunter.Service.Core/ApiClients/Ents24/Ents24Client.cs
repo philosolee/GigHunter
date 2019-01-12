@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using GigHunter.DomainModels.Models;
-using GigHunter.DomainModels.Repositories;
 using GigHunter.Service.Core.ApiClients.Ents24.Responses;
 using GigHunter.Service.Core.Wrappers;
+using GigHunter.DomainModels.Models;
+using GigHunter.DomainModels.Repositories;
 using RestSharp;
 
-namespace GigHunter.Service.Core.ApiClients
+namespace GigHunter.Service.Core.ApiClients.Ents24
 {
 	public class Ents24Client : IApiClient
 	{

@@ -1,6 +1,4 @@
-﻿using System;
-using GigHunter.DomainModels.Models;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace GigHunter.DomainModels.Utilities

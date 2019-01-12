@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using GigHunter.DomainModels.Models;
-using GigHunter.DomainModels.Utilities;
+﻿using GigHunter.DomainModels.Models;
 using MongoDB.Driver;
 
 namespace GigHunter.DomainModels.Repositories

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
 using GigHunter.DomainModels.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -9,7 +7,7 @@ namespace GigHunter.DomainModels.Repositories
 {
 	public interface IRepository<T> where T : EntityBase
 	{
-		void Add(T item);
+		void Add(T entity);
 
 		List<T> GetAll();
 

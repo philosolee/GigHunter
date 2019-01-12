@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GigHunter.DomainModels.Models;
 
-namespace GigHunter.Service.Core
+namespace GigHunter.Service.Core.ApiClients
 {
 	public interface IApiClient
 	{

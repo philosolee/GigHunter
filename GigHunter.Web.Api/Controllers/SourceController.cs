@@ -1,57 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web;
-using System.Web.Caching;
-using System.Web.Http;
+﻿using System.Collections.Generic;
 using GigHunter.DomainModels.Models;
 using GigHunter.DomainModels.Repositories;
-using GigHunter.DomainModels.Utilities;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 
 namespace GigHunter.Web.Api.Controllers
 {
-	public class SourceController : ApiController
+	[Route("api/[controller]")]
+	[ApiController]
+	public class SourceController : ControllerBase
 	{
 		private readonly IRepository<Source> _sourceRepository;
 
-		public SourceController() : this(new SourceRepository())
+		public SourceController()
 		{
+			_sourceRepository = new SourceRepository();
 		}
 
-		public SourceController(IRepository<Source> sourceRepository)
-		{
-			_sourceRepository = sourceRepository;
-		}
-
-
-		public IEnumerable<Source> GetAllSources()
+		[HttpGet]
+		public IEnumerable<Source> Get()
 		{
 			return _sourceRepository.GetAll();
 		}
 
-		public HttpResponseMessage GetSource(string id)
+		[HttpGet("{id}")]
+		public ActionResult<Source> Get(string id)
 		{
 			if (!ObjectId.TryParse(id, out var objectId))
-				return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id {id} is not a valid Id");
+				return BadRequest("Id must be a valid Mongo Id");
 
 			var source = _sourceRepository.GetById(objectId);
 
 			return source != null
-				? Request.CreateResponse(HttpStatusCode.Found, source)
-				: Request.CreateResponse(HttpStatusCode.NotFound);
+				? (ActionResult<Source>) source
+				: NotFound();
 		}
 
-		public HttpResponseMessage AddSource(Source source)
+		[HttpPost]
+		public ActionResult Post([FromBody] Source source)
 		{
 			if (_sourceRepository.Exists(source.Id))
-				return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id {source.Id} already exists");
+				return BadRequest($"Source with Id of {source.Id} already exists");
 
 			_sourceRepository.Add(source);
-			
-			return Request.CreateResponse(HttpStatusCode.Created, source);
+			return Created($"/api/source/{source.Id}", source);
 		}
 	}
 }

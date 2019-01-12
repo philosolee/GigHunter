@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
-using GigHunter.DomainModels;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using GigHunter.DomainModels;
 
 namespace GigHunter.TestUtilities.Database
 {
@@ -9,14 +9,12 @@ namespace GigHunter.TestUtilities.Database
 	{
 		public IMongoDatabase mongoDatabase;
 
-		private static string _connectionString => Properties.Settings.Default.ConnectionString;
-		private static string _databaseName => Properties.Settings.Default.Database;
 		private readonly string _collectionName;
 
 		public MongoDatabaseUtilities(string collectionName)
 		{
-			var client = new MongoClient(_connectionString);
-			mongoDatabase = client.GetDatabase(_databaseName);
+			var client = new MongoClient(Settings.GetInstance().MongoServer);
+			mongoDatabase = client.GetDatabase(Settings.GetInstance().MongoDatabase);
 			_collectionName = collectionName;
 		}
 

@@ -1,31 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using GigHunter.DomainModels.Repositories;
+using GigHunter.DomainModels.Models;
 using GigHunter.DomainModels.Utilities;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-
-namespace GigHunter.DomainModels
+namespace GigHunter.DomainModels.Repositories
 {
 	public abstract class RepositoryBase<T> : IRepository<T> where T : EntityBase
 	{
-		public static string ConnectionString => Properties.Settings.Default.ConnectionString;
-		public static string DatabaseName => Properties.Settings.Default.Database;
 		public readonly IMongoCollection<T> MongoCollection;
-		private IMongoDatabase mongoDatabase;
 
 		protected RepositoryBase(string collectionName)
 		{
-			var client = new MongoClient(ConnectionString);
-			mongoDatabase = client.GetDatabase(DatabaseName);
+			var client = new MongoClient(Settings.GetInstance().MongoServer);
+			var mongoDatabase = client.GetDatabase(Settings.GetInstance().MongoDatabase);
 			MongoCollection = mongoDatabase.GetCollection<T>(collectionName);
 		}
 
-		public virtual void Add(T Entity)
+		public virtual void Add(T entity)
 		{
-			MongoCollection.InsertOneAsync(Entity).Wait();
+			MongoCollection.InsertOneAsync(entity).Wait();
 		}
 
 		public virtual List<T> GetAll()
