@@ -1,3 +1,0 @@
-﻿# GigHunter.Web.Ui
-
-
