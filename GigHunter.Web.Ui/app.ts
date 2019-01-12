@@ -1,9 +1,10 @@
-﻿import debug = require('debug');
-import express = require('express');
-import path = require('path');
+﻿import * as debug from "debug";
+import * as express from "express";
+import * as path from "path";
 
-import routes from './routes/index';
-import users from './routes/user';
+import routes from "./routes/index";
+import users from "./routes/user";
+import sources from "./routes/sources";
 
 var app = express();
 
@@ -15,6 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/sources', sources);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

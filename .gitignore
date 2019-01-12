@@ -260,3 +260,7 @@ paket-files/
 __pycache__/
 *.pyc
 /.axoCover/runs
+
+# express files
+*.js
+*.js.map
