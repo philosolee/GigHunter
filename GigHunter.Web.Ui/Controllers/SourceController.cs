@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GigHunter.DomainModels.Models;
-using GigHunter.Web.Ui.Core.ApiRequests;
-using Microsoft.AspNetCore.Http;
+﻿using GigHunter.Web.Ui.Core.ApiRequests;
 using Microsoft.AspNetCore.Mvc;
+using GigHunter.DomainModels.Models;
 
 namespace GigHunter.Web.Ui.Controllers
 {
@@ -23,6 +18,7 @@ namespace GigHunter.Web.Ui.Controllers
 		{
 			var sourceRequest = new SourceRequests();
 			sourceRequest.AddSource(source);
+			ViewBag.Sources = sourceRequest.GetSources();
 			return View();
 		}
 	}

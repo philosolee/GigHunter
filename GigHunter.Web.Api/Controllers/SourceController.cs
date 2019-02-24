@@ -29,7 +29,7 @@ namespace GigHunter.Web.Api.Controllers
 			if (!ObjectId.TryParse(id, out var objectId))
 				return BadRequest("Id must be a valid Mongo Id");
 
-			var source = _sourceRepository.GetById(objectId);
+			var source = _sourceRepository.GetById(objectId.ToString());
 
 			return source != null
 				? (ActionResult<Source>) source
@@ -39,7 +39,7 @@ namespace GigHunter.Web.Api.Controllers
 		[HttpPost]
 		public ActionResult Post([FromBody] Source source)
 		{
-			if (_sourceRepository.Exists(source.Id))
+			if (source.Id != null && _sourceRepository.Exists(source.Id))
 				return BadRequest($"Source with Id of {source.Id} already exists");
 
 			_sourceRepository.Add(source);

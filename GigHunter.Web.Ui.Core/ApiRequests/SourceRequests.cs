@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using GigHunter.DomainModels.Models;
 using RestSharp;
@@ -18,13 +19,13 @@ namespace GigHunter.Web.Ui.Core.ApiRequests
 
 		public List<Source> GetSources()
 		{
-			var request = new RestRequest("source", Method.GET);
+			var request = new RestRequest("source", Method.GET, DataFormat.Json);
 			var response = _client.Execute<List<Source>>(request);
 
-			if (response.IsSuccessful)
-				return response.Data;
+			if (!response.IsSuccessful)
+				throw new HttpRequestException("Unable to retrieve data", response?.ErrorException);
 
-			throw response.ErrorException;
+			return response.Data;
 		}
 
 		public Source AddSource(Source source)
@@ -32,7 +33,9 @@ namespace GigHunter.Web.Ui.Core.ApiRequests
 			var request = new RestRequest("source", Method.POST);
 
 			var serialiser = new JsonSerializer();
-			request.AddJsonBody(serialiser.Serialize(source));
+
+			var bodyParameter = new Parameter("application/json", serialiser.Serialize(source), ParameterType.RequestBody);
+			request.AddParameter(bodyParameter);
 
 			var response = _client.Execute<Source>(request);
 

@@ -28,17 +28,17 @@ namespace GigHunter.DomainModels.Repositories
 			return MongoCollection.Find(Filter<T>.Empty).ToListAsync().Result;
 		}
 
-		public virtual T GetById(ObjectId id)
+		public virtual T GetById(string id)
 		{
-			var result = MongoCollection.Find(Filter<T>.Id(id)).ToListAsync().Result;
+			var result = MongoCollection.Find(Filter<T>.Id(new ObjectId(id))).ToListAsync().Result;
 
 			return result.FirstOrDefault(x => x.Id == id);
 
 		}
 
-		public virtual bool Exists(ObjectId id)
+		public virtual bool Exists(string id)
 		{
-			return MongoCollection.CountDocuments(Filter<T>.Id(id)) != 0;
+			return MongoCollection.CountDocuments(Filter<T>.Id(new ObjectId(id))) != 0;
 		}
 
 		public virtual List<T> GetByName(string sourceName)
@@ -46,18 +46,18 @@ namespace GigHunter.DomainModels.Repositories
 			return MongoCollection.Find(Filter<T>.Name(sourceName)).ToListAsync().Result;
 		}
 
-		public virtual bool UpdateById(ObjectId id, T updatedEntity)
+		public virtual bool UpdateById(string id, T updatedEntity)
 		{
 			var updateDefinition = EntityUpdateDefinition(updatedEntity);
-			var result = MongoCollection.UpdateOne(Filter<T>.Id(id), updateDefinition);
+			var result = MongoCollection.UpdateOne(Filter<T>.Id(new ObjectId(id)), updateDefinition);
 			return result.ModifiedCount != 0;
 		}
 
 		public abstract UpdateDefinition<T> EntityUpdateDefinition(T updatedEntity);
 
-		public virtual bool DeleteById(ObjectId id)
+		public virtual bool DeleteById(string id)
 		{
-			var result = MongoCollection.DeleteOne(Filter<T>.Id(id));
+			var result = MongoCollection.DeleteOne(Filter<T>.Id(new ObjectId(id)));
 			return result.DeletedCount == 1;
 		}
 	}

@@ -94,7 +94,7 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		{
 			_sourceRepository.Add(_testSiteOne);
 
-			var idToLookFor = new ObjectId();
+			var idToLookFor = "5c72a6f52f44614ba8c56071";
 			var result = _sourceRepository.GetById(idToLookFor);
 
 			Assert.IsNull(result);
@@ -179,7 +179,7 @@ namespace GigHunter.DomainModels.Tests.Repositories
 			};
 
 			// Perform
-			var invalidObjectId = new ObjectId();
+			var invalidObjectId = "5c72a6f52f44614ba8c56071";
 			var result = _sourceRepository.UpdateById(invalidObjectId, _testSiteOne);
 
 			// Verify
@@ -222,7 +222,7 @@ namespace GigHunter.DomainModels.Tests.Repositories
 			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
 			// Perform
-			var invalidId = new ObjectId();
+			var invalidId = "5c72a6f52f44614ba8c56071";
 			var result = _sourceRepository.DeleteById(invalidId);
 
 			// Verify

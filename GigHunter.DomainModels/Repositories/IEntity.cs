@@ -4,6 +4,6 @@ namespace GigHunter.DomainModels.Repositories
 {
 	public interface IEntity
 	{
-		ObjectId Id { get; set; }
+		string Id { get; set; }
 	}
 }

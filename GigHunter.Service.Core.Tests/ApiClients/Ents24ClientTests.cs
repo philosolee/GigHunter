@@ -54,7 +54,7 @@ namespace GigHunter.Service.Core.Tests.ApiClients
 
 			// mockResponse.VerifySet(r => r.Headers = It.Is<List<Parameter>>(a => a.Contains(new Parameter("Authorization", It.IsAny<string>(), ParameterType.HttpHeader))));
 
-			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<ObjectId> (), source), Times.Once);
+			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<string> (), source), Times.Once);
 			Assert.AreEqual(DateTime.Now.AddDays(60).ToShortDateString(), source.TokenExpiryDate.ToShortDateString());
 		}
 
@@ -78,7 +78,7 @@ namespace GigHunter.Service.Core.Tests.ApiClients
 			// Verify			
 			Assert.NotNull(ents24Client);
 			_mockRestClient.VerifySet(c => c.BaseUrl = It.Is<Uri>(a => a == new Uri(source.BaseUrl)));
-			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<ObjectId>(), source), Times.Never);
+			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<string>(), source), Times.Never);
 		}
 
 		[Test]
@@ -104,7 +104,7 @@ namespace GigHunter.Service.Core.Tests.ApiClients
 			// Verify			
 			Assert.NotNull(ents24Client);
 			_mockRestClient.VerifySet(c => c.BaseUrl = It.Is<Uri>(a => a == new Uri(source.BaseUrl)));
-			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<ObjectId>(), source), Times.Once);
+			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<string>(), source), Times.Once);
 			Assert.AreEqual(DateTime.Now.AddDays(60).ToShortDateString(), source.TokenExpiryDate.ToShortDateString());
 		}
 
@@ -153,7 +153,7 @@ namespace GigHunter.Service.Core.Tests.ApiClients
 			// Verify			
 			Assert.NotNull(ents24Client);
 			_mockRestClient.VerifySet(c => c.BaseUrl = It.Is<Uri>(a => a == new Uri(source.BaseUrl)));
-			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<ObjectId>(), source), Times.Once);
+			_mockSourceRepository.Verify(r => r.UpdateById(It.IsAny<string>(), source), Times.Once);
 			Assert.AreEqual(DateTime.Now.AddDays(60).ToShortDateString(), source.TokenExpiryDate.ToShortDateString());
 		}
 

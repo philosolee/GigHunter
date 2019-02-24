@@ -11,15 +11,15 @@ namespace GigHunter.DomainModels.Repositories
 
 		List<T> GetAll();
 
-		T GetById(ObjectId id);
+		T GetById(string id);
 
 		List<T> GetByName(string name);
 
-		bool Exists(ObjectId id);
+		bool Exists(string id);
 
-		bool UpdateById(ObjectId id, T updatedItem);
+		bool UpdateById(string id, T updatedItem);
 
-		bool DeleteById(ObjectId id);
+		bool DeleteById(string id);
 
 		UpdateDefinition<T> EntityUpdateDefinition(T updatedEntity);
 	}

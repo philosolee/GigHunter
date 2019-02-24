@@ -1,6 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal
 @using Microsoft.AspNetCore.Razor.Language
-@using GigHunter.DomainModels.Models;
+@using GigHunter.DomainModels.Models
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@model Source
+
 @{
     ViewData["Title"] = "Home Page";
     List<Source> sources = ViewBag.Sources;
@@ -41,28 +45,37 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    @using (Html.BeginForm("Source", "Source", FormMethod.Post, new { id = "newSourceForm" }))
+                    { 
                         <div class="form-group">
-                            <label for="newSourceName">Name</label>
-                            <input type="text" class="form-control" id="newSourceName" aria-describedby="sourceName" placeholder="Enter Source Name" />
+                            @Html.LabelFor(model=>model.Name, "Source Name")
+                            @Html.TextBoxFor(model=>model.Name, new { @class="form-control" })
+                            @*<label for="newSourceName">Name</label>
+                            <input type="text" class="form-control" id="newSourceName" aria-describedby="sourceName" placeholder="Enter Source Name"/>*@
                         </div>
                         <div class="form-group">
-                            <label for="newSourceUrl">Url</label>
-                            <input type="text" class="form-control" id="newSourceUrl" aria-describedby="sourceUrl" placeholder="Enter Source Url" />
+                            @Html.LabelFor(model => model.BaseUrl, "Source Url")
+                            @Html.TextBoxFor(model => model.BaseUrl, new { @class = "form-control" })
+                            @*<label for="newSourceUrl">Url</label>
+                            <input type="text" class="form-control" id="newSourceUrl" aria-describedby="sourceUrl" placeholder="Enter Source Url" />*@
                         </div>
                         <div class="form-group">
-                            <label for="newSourceClientId">ClientId</label>
-                            <input type="text" class="form-control" id="newSourceClientId" aria-describedby="sourceClientId" placeholder="Enter Source ClientId" />
+                            @Html.LabelFor(model => model.ClientId, "Source ClientId")
+                            @Html.TextBoxFor(model => model.ClientId, new { @class = "form-control" })
+                            @*<label for="newSourceClientId">ClientId</label>
+                            <input type="text" class="form-control" id="newSourceClientId" aria-describedby="sourceClientId" placeholder="Enter Source ClientId" />*@
                         </div>
                         <div class="form-group">
-                            <label for="newSourceClientSecret">Client Secret</label>
-                            <input type="text" class="form-control" id="newSourceClientSecret" aria-describedby="sourceClientSecret" placeholder="Enter Source Client Secret" />
+                            @Html.LabelFor(model => model.ClientSecret, "Source Client Secret")
+                            @Html.TextBoxFor(model => model.ClientSecret, new { @class = "form-control" })
+                            @*<label for="newSourceClientSecret">Client Secret</label>
+                            <input type="text" class="form-control" id="newSourceClientSecret" aria-describedby="sourceClientSecret" placeholder="Enter Source Client Secret" />*@
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" data->Add Source</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Submit">
+                        </div>
+                     }
                 </div>
             </div>
         </div>
