@@ -1,0 +1,70 @@
+﻿@using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal
+@using Microsoft.AspNetCore.Razor.Language
+@using GigHunter.DomainModels.Models;
+@{
+    ViewData["Title"] = "Home Page";
+    List<Source> sources = ViewBag.Sources;
+
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Source</th>
+                <th scope="col">Url</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var source in sources)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => source.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => source.BaseUrl)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <button id="newSource" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSource">
+            Add New Source
+        </button>
+    </div>
+
+    <!-- Add Source Modal -->
+    <div class="modal fade" id="addSource" tabindex="-1" role="dialog" aria-labelledby="addSourceLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSourceLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="newSourceName">Name</label>
+                            <input type="text" class="form-control" id="newSourceName" aria-describedby="sourceName" placeholder="Enter Source Name" />
+                        </div>
+                        <div class="form-group">
+                            <label for="newSourceUrl">Url</label>
+                            <input type="text" class="form-control" id="newSourceUrl" aria-describedby="sourceUrl" placeholder="Enter Source Url" />
+                        </div>
+                        <div class="form-group">
+                            <label for="newSourceClientId">ClientId</label>
+                            <input type="text" class="form-control" id="newSourceClientId" aria-describedby="sourceClientId" placeholder="Enter Source ClientId" />
+                        </div>
+                        <div class="form-group">
+                            <label for="newSourceClientSecret">Client Secret</label>
+                            <input type="text" class="form-control" id="newSourceClientSecret" aria-describedby="sourceClientSecret" placeholder="Enter Source Client Secret" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" data->Add Source</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

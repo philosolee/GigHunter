@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{732BE3D7-8E79-4C3D-801F-5BBE5D5C799C}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "GigHunter.Web.Ui", "GigHunter.Web.Ui\GigHunter.Web.Ui.njsproj", "{81E31247-6DD8-4A84-A63D-9BE60029FF5A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigHunter.DomainModels", "GIgHunter.DomainModels\GigHunter.DomainModels.csproj", "{55AD544F-0B1B-43A9-A6D8-4A96B9233E2A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigHunter.DomainModels.Tests", "GigHunter.DomainModels.Tests\GigHunter.DomainModels.Tests.csproj", "{73E60972-80DE-45CE-B292-0E4D82CE1F27}"
@@ -19,16 +17,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigHunter.Service.Core.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigHunter.Web.Api", "GigHunter.Web.Api\GigHunter.Web.Api.csproj", "{F9921C91-843F-4DB1-A139-293858145508}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigHunter.Web.Ui", "GigHunter.Web.Ui\GigHunter.Web.Ui.csproj", "{F68C6DED-BD19-43BA-A957-54AE36EECEBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigHunter.Web.Ui.Core", "GigHunter.Web.Ui.Core\GigHunter.Web.Ui.Core.csproj", "{403CE766-D0F0-4DEB-A2D0-9EC8C6158714}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{81E31247-6DD8-4A84-A63D-9BE60029FF5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81E31247-6DD8-4A84-A63D-9BE60029FF5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81E31247-6DD8-4A84-A63D-9BE60029FF5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{81E31247-6DD8-4A84-A63D-9BE60029FF5A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{55AD544F-0B1B-43A9-A6D8-4A96B9233E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{55AD544F-0B1B-43A9-A6D8-4A96B9233E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55AD544F-0B1B-43A9-A6D8-4A96B9233E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +51,14 @@ Global
 		{F9921C91-843F-4DB1-A139-293858145508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9921C91-843F-4DB1-A139-293858145508}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9921C91-843F-4DB1-A139-293858145508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F68C6DED-BD19-43BA-A957-54AE36EECEBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F68C6DED-BD19-43BA-A957-54AE36EECEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F68C6DED-BD19-43BA-A957-54AE36EECEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F68C6DED-BD19-43BA-A957-54AE36EECEBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{403CE766-D0F0-4DEB-A2D0-9EC8C6158714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{403CE766-D0F0-4DEB-A2D0-9EC8C6158714}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{403CE766-D0F0-4DEB-A2D0-9EC8C6158714}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{403CE766-D0F0-4DEB-A2D0-9EC8C6158714}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
