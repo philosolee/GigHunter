@@ -13,8 +13,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: donet restore
-
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
   
