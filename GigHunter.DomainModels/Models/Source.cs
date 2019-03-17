@@ -16,6 +16,17 @@ namespace GigHunter.DomainModels.Models
 		public string ApiToken { get; set; }
 
 		[BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-		public DateTime TokenExpiryDate { get; set; } 
+		public DateTime TokenExpiryDate { get; set; }
+
+		public string ToJson()
+		{
+			return $"{{\"id\":\"{Id}\", " +
+			       $"\"name\":\"{Name}\"," +
+			       $"\"baseUrl\":\"{BaseUrl}\", " +
+			       $"\"clientId\":\"{ClientId}\", " +
+			       $"\"clientSecret\": \"{ClientSecret}\", " +
+			       $"\"apiToken\": \"{ApiToken}\", " +
+			       $"\"tokenExpiryDate\": \"{TokenExpiryDate.ToString("s")}\"}}";
+		}
 	}
 }
