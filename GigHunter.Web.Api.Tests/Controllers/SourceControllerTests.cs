@@ -4,9 +4,6 @@ using FluentAssertions.Json;
 using GigHunter.DomainModels.Models;
 using GigHunter.TestUtilities.Database;
 using GigHunter.TestUtilities.DataGenerators;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 

@@ -264,3 +264,6 @@ __pycache__/
 # express files
 *.js
 *.js.map
+
+# axoCover
+.axoCover
