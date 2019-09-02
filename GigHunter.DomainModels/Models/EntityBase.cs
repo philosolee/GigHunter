@@ -1,7 +1,6 @@
 ﻿using GigHunter.DomainModels.Repositories;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json;
 
 namespace GigHunter.DomainModels.Models
 {

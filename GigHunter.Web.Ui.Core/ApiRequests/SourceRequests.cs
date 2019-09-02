@@ -12,9 +12,9 @@ namespace GigHunter.Web.Ui.Core.ApiRequests
 	{
 		private RestClient _client;
 
-		public SourceRequests()
+		public SourceRequests(string uri)
 		{
-			_client = new RestClient("https://localhost:44311/api/");
+			_client = new RestClient(uri);
 		}
 
 		public List<Source> GetSources()

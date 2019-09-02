@@ -18,6 +18,12 @@ namespace GigHunter.TestUtilities.Database
 			_collectionName = collectionName;
 		}
 
+		public void AddItem(T item)
+		{
+			var collection = mongoDatabase.GetCollection<T>(_collectionName);
+			collection.InsertOne(item);
+		}
+
 		public List<T> FindRecordById(string id)
 		{
 			var filter = Builders<T>.Filter.Eq("Id", id);

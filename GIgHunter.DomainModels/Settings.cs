@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MongoDB.Driver;
-
-namespace GigHunter.DomainModels
+﻿namespace GigHunter.DomainModels
 {
 	public class Settings
 	{

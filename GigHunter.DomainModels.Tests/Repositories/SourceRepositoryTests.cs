@@ -30,7 +30,7 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void Add_SingleValidSource_ShouldBeInserted()
 		{
-			_sourceRepository.Add(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
 
 			var retrievedSource = _mongoDatabaseUtilities.FindRecordById(_testSiteOne.Id);
 
@@ -43,9 +43,9 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void GetAll_ThreeItemsInCollection_ShouldReturnAllThree()
 		{
-			_sourceRepository.Add(_testSiteOne);
-			_sourceRepository.Add(_testSiteTwo);
-			_sourceRepository.Add(_testSiteThree);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteTwo);
+			_mongoDatabaseUtilities.AddItem(_testSiteThree);
 
 			var resultFromDatabase = _sourceRepository.GetAll();
 
@@ -77,9 +77,9 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void GetById_ValidObjectId_ShouldReturnSingleSource()
 		{
-			_sourceRepository.Add(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
 			// This has same details, but different Id to the above
-			_sourceRepository.Add(TestSourceOne());
+			_mongoDatabaseUtilities.AddItem(TestSourceOne());
 
 			var result = _sourceRepository.GetById(_testSiteOne.Id);
 
@@ -92,7 +92,7 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void GetById_InvalidObjectId_ShouldReturnEmptyList()
 		{
-			_sourceRepository.Add(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
 
 			var idToLookFor = "5c72a6f52f44614ba8c56071";
 			var result = _sourceRepository.GetById(idToLookFor);
@@ -103,9 +103,9 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void GetByName_ValidName_ShouldReturnSingleSource()
 		{
-			_sourceRepository.Add(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
 			// This has same details, but different Id to the above
-			_sourceRepository.Add(_testSiteTwo);
+			_mongoDatabaseUtilities.AddItem(_testSiteTwo);
 
 			var result = _sourceRepository.GetByName(_testSiteOne.Name);
 
@@ -119,9 +119,9 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void GetByName_ValidNameMultiplePresent_ShouldReturnMultipleSources()
 		{
-			_sourceRepository.Add(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
 			// This has same details, but different Id to the above
-			_sourceRepository.Add(TestSourceOne());
+			_mongoDatabaseUtilities.AddItem(TestSourceOne());
 
 			var result = _sourceRepository.GetByName(_testSiteOne.Name);
 
@@ -138,9 +138,9 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void GetByName_InvalidName_ShouldReturnSingleSource()
 		{
-			_sourceRepository.Add(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
 			// This has same details, but different Id to the above
-			_sourceRepository.Add(TestSourceOne());
+			_mongoDatabaseUtilities.AddItem(TestSourceOne());
 
 			var result = _sourceRepository.GetByName("invalidName");
 
@@ -150,8 +150,8 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void UpdateById_ValidObjectId_ShouldUpdateAndReturnTrue()
 		{
-			_sourceRepository.Add(_testSiteOne);
-			_sourceRepository.Add(_testSiteTwo);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteTwo);
 
 			_testSiteOne.Name = "Altered Name One";
 			_testSiteOne.BaseUrl = "https://www.changedurlone.com";
@@ -170,7 +170,7 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		public void UpdateById_InvalidObjectId_ShouldReturnFalseAndNotUpdate()
 		{
 			// Setup
-			_sourceRepository.Add(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
 
 			var updatedDetails = new Source
 			{
@@ -195,8 +195,8 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void DeleteById_ValidObjectId_ShouldBeDeletedAndReturnNumberOfRecordsDeleted()
 		{
-			_sourceRepository.Add(_testSiteOne);
-			_sourceRepository.Add(_testSiteTwo);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteTwo);
 
 			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
@@ -216,8 +216,8 @@ namespace GigHunter.DomainModels.Tests.Repositories
 		[Test]
 		public void DeleteById_InvalidObjectId_ShouldReturnZeroAndNotDeleteAnything()
 		{
-			_sourceRepository.Add(_testSiteOne);
-			_sourceRepository.Add(_testSiteTwo);
+			_mongoDatabaseUtilities.AddItem(_testSiteOne);
+			_mongoDatabaseUtilities.AddItem(_testSiteTwo);
 
 			var countBefore = _mongoDatabaseUtilities.CountRecordsInCollection();
 
