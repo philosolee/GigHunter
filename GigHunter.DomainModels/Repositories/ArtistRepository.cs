@@ -5,8 +5,6 @@ namespace GigHunter.DomainModels.Repositories
 {
 	public class ArtistRepository : RepositoryBase<Artist>, IRepository<Artist>
 	{
-		private readonly IMongoCollection<Artist> _artistCollection;
-
 		public ArtistRepository() : base("artists")
 		{
 		}
